@@ -9,17 +9,47 @@
 
     <EditText
         android:id="@+id/inputSearch"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Cari nama customer"
+        android:hint="Customer"
         android:inputType="textVisiblePassword"
         android:layout_margin="16dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Search"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"/>
+
+    <TextView
+        android:id="@+id/nama"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/putihtua"
+        android:layout_below="@+id/inputSearch"
+        android:textStyle="bold"
+        android:text="Nama Customer"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="10dp"/>
+
+    <TextView
+        android:id="@+id/sisa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/putihtua"
+        android:layout_below="@+id/inputSearch"
+        android:textStyle="bold"
+        android:text="Sisa Piutang"
+        android:layout_alignParentEnd="true"
+        android:layout_toLeftOf="@+id/nama"
+        android:layout_marginEnd="10dp"/>
 
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/inputSearch"
+        android:layout_below="@+id/nama"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"/>
 </RelativeLayout>

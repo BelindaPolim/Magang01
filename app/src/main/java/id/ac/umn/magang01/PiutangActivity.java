@@ -6,10 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -20,6 +17,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -34,7 +33,6 @@ public class PiutangActivity extends AppCompatActivity {
     private static String url = "http://119.235.208.235:8092/piutang_dagang_per_customer";
 
     private ArrayList<HashMap<String, String>> contactlist;
-    private PiutangAdapter pAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,31 +47,7 @@ public class PiutangActivity extends AppCompatActivity {
         new GetContacts().execute();
 
         search = findViewById(R.id.inputSearch);
-        search.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                lv.getFilter().filter(s);
-//                ma.notifyDataSetChanged();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                filter(s.toString());
-            }
-        });
-    }
-
-    private void filter(String text){
-        ArrayList<HashMap<String, String>> filteredlist = new ArrayList<>();
-
-        for(HashMap<String, String> item : contactlist){
-//            if(item.get)
-        }
     }
 
     private class GetContacts extends AsyncTask<Void, Void, Void>{
@@ -90,6 +64,17 @@ public class PiutangActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             HttpHandler sh = new HttpHandler();
+//            Locale localeID = new Locale("in", "ID");
+//            NumberFormat formatRP = NumberFormat.getCurrencyInstance(localeID);
+
+            DecimalFormat pemisahRibuan = (DecimalFormat) DecimalFormat.getCurrencyInstance();
+            DecimalFormatSymbols formatPemisah = new DecimalFormatSymbols();
+
+            formatPemisah.setCurrencySymbol("");
+            formatPemisah.setMonetaryDecimalSeparator(',');
+            formatPemisah.setGroupingSeparator('.');
+
+            pemisahRibuan.setDecimalFormatSymbols(formatPemisah);
 
             // Making a request to url and getting response
             String jsonStr = sh.makeServiceCall(url);
@@ -107,15 +92,7 @@ public class PiutangActivity extends AppCompatActivity {
 
                         String id = c.getString("CustCode");
                         String name = c.getString("FullName");
-//                        String email = c.getString("email");
-//                        String address = c.getString("address");
-//                        String gender = c.getString("gender");
-
-                        // Phone node is JSON Object
-//                        JSONObject phone = c.getJSONObject("phone");
-                        String sisaPiutang = c.getString("SisaPiutang");
-//                        String home = phone.getString("home");
-//                        String office = phone.getString("office");
+                        int sisaPiutang = c.getInt("SisaPiutang");
 
                         // tmp hash map for single contact
                         HashMap<String, String> contact = new HashMap<>();
@@ -123,7 +100,7 @@ public class PiutangActivity extends AppCompatActivity {
                         // adding each child node to HashMap key => value
                         contact.put("id", id);
                         contact.put("name", name);
-                        contact.put("mobile", sisaPiutang);
+                        contact.put("sisaPiutang", pemisahRibuan.format((double)sisaPiutang));
 
                         // adding contact to contact list
                         contactlist.add(contact);
@@ -169,9 +146,8 @@ public class PiutangActivity extends AppCompatActivity {
             ListAdapter adapter = new SimpleAdapter(
                     PiutangActivity.this, contactlist,
                     R.layout.list_piutang, new String[]{"ID", "name",
-                    "mobile"}, new int[]{R.id.custID,
+                    "sisaPiutang"}, new int[]{R.id.custID,
                     R.id.custName, R.id.sisaPiutang});
-
             lv.setAdapter(adapter);
         }
     }
