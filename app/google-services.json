@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "978376411650",
+    "firebase_url": "https://magang01-109d6.firebaseio.com",
+    "project_id": "magang01-109d6",
+    "storage_bucket": "magang01-109d6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:978376411650:android:2f170902150f68b827751b",
+        "android_client_info": {
+          "package_name": "id.ac.umn.magang01"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "978376411650-omtv1f0ck6nov67fsam05oa88fg7q32p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.ac.umn.magang01",
+            "certificate_hash": "fa19249940740d310856dfe6690a6de0d21b2561"
+          }
+        },
+        {
+          "client_id": "978376411650-h1326shl87ddkccsnf6d9464sp41383q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-uwPzT6-7K1BZLlqowUPPzTRn1NILHEM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "978376411650-h1326shl87ddkccsnf6d9464sp41383q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

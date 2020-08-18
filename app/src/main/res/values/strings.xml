@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Magang01</string>
+    <string name="AppName">NamaAplikasi</string>
+    <string name="pwdHint">Password</string>
+    <string name="usrHint">Username</string>
+    <string name="loginBtn">Login</string>
+    <string name="logoutMsg">Log Off</string>
+    <string name="emailHint">Email</string>
+</resources>
