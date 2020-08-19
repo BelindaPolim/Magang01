@@ -78,7 +78,8 @@
             android:layout_marginTop="25dp"
             android:layout_marginEnd="10dp"
             android:gravity="center"
-            android:text="Welcome Back"
+            android:text="Welcome"
+            android:textAllCaps="true"
             android:textColor="@color/colorTextPrimary"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -128,9 +129,9 @@
             android:layout_height="20dp"
             android:src="@drawable/ic_cancel"
             android:tint="@color/putihtua"
-            app:layout_constraintEnd_toEndOf="@id/viewEmailDivider"
             app:layout_constraintBottom_toBottomOf="@id/inputUsername"
-            app:layout_constraintStart_toStartOf="@id/inputUsername"/>
+            app:layout_constraintEnd_toEndOf="@id/inputUsername"
+            android:layout_marginRight="30dp"/>
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/inputPass"
@@ -168,7 +169,7 @@
             android:src="@drawable/ic_lock"
             android:tint="@color/colorTextHint"
             app:layout_constraintBottom_toBottomOf="@id/inputPass"
-            app:layout_constraintStart_toStartOf="@id/inputPass"/>
+            app:layout_constraintStart_toStartOf="@id/inputPass" />
 
         <ImageView
             android:id="@+id/ivClear2"
@@ -176,20 +177,32 @@
             android:layout_height="20dp"
             android:src="@drawable/ic_cancel"
             android:tint="@color/putihtua"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="@id/inputPass"
-            app:layout_constraintStart_toStartOf="@id/inputPass"/>
+            app:layout_constraintEnd_toEndOf="@id/inputUsername"
+            android:layout_marginRight="30dp"/>
+
+        <CheckBox
+            android:id="@+id/chkShowHide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="Show password"
+            android:backgroundTint="@color/colorTextHint"
+            android:textColor="@color/colorTextHint"
+            app:layout_constraintTop_toBottomOf="@id/inputPass"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="@id/inputPass"/>
 
         <Button
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="60dp"
             android:layout_marginEnd="10dp"
             android:background="@drawable/primary_button_background"
             android:text="@string/loginBtn"
-            android:textAllCaps="false"
+            android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="13sp"
             android:textStyle="bold"

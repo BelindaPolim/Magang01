@@ -1,22 +1,21 @@
 package id.ac.umn.magang01;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 //import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
+    LinearLayout llPenjualan, llPembelian, llPiutang, llHutang;
 
-    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,10 +24,42 @@ public class MainActivity extends AppCompatActivity {
 
 //        recyclerView = findViewById(R.id.recyclerView);
 
-        MainRecyclerAdapter adapter = new MainRecyclerAdapter(this);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        MainRecyclerAdapter adapter = new MainRecyclerAdapter(this);
+//        recyclerView.setAdapter(adapter);
+//        recyclerView.setHasFixedSize(true);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        llPenjualan = findViewById(R.id.layoutPenjualan);
+        llPenjualan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), PenjualanActivity.class));
+            }
+        });
+
+        llPembelian = findViewById(R.id.layoutPembelian);
+        llPembelian.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), PembelianActivity.class));
+            }
+        });
+
+        llPiutang = findViewById(R.id.layoutPiutang);
+        llPiutang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), PiutangActivity.class));
+            }
+        });
+
+        llHutang = findViewById(R.id.layoutHutang);
+        llHutang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), HutangActivity.class));
+            }
+        });
 
     }
 

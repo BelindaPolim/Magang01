@@ -51,8 +51,10 @@ import static id.ac.umn.magang01.Setting.SP_USER;
 public class LoginActivity extends AppCompatActivity {
     public final static int MY_PERMISSIONS_REQUEST_READ_PHONE_STATE = 0;
     Context c;
+    Button btnLogin;
 
     TextInputEditText etUserId, etPassword;
+    TextView forgotPwd;
     ProgressDialog pd;
     String username,password;
     String nik;
@@ -94,7 +96,6 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.inputPass);
 
         ivClear1 = findViewById(R.id.ivClear);
-
         ivClear1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,19 +110,34 @@ public class LoginActivity extends AppCompatActivity {
                 etPassword.setText("");
             }
         });
-//        chkShowHide = findViewById(R.id.chkShowHide);
-//        chkShowHide.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                chkShowHide.setActivated(!chkShowHide.isActivated());
-//                showHide();
-//            }
-//        });
+        chkShowHide = findViewById(R.id.chkShowHide);
+        chkShowHide.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chkShowHide.setActivated(!chkShowHide.isActivated());
+                showHide();
+            }
+        });
         etUserId.setText("");
         etPassword.setText("");
         c=this;
-//        loadIMEI();
+        loadIMEI();
+        btnLogin = findViewById(R.id.btnLogin);
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                prosesLogin(v);
+            }
+        });
+
+        forgotPwd = findViewById(R.id.textForgotPwd);
+        forgotPwd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                forgotPasswordbyEmail(v);
+            }
+        });
+
     }
     public void showHide(){
         if(chkShowHide.isChecked())
@@ -162,8 +178,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void prosesLogin(View view) {
-
-
         username = etUserId.getText().toString().trim();
         password = etPassword.getText().toString().trim();
 
