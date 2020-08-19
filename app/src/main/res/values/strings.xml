@@ -1,9 +1,14 @@
 <resources>
-    <string name="app_name">Magang01</string>
+    <string name="app_name">Manajemen Informasi Usaha Dagang</string>
     <string name="AppName">NamaAplikasi</string>
     <string name="pwdHint">Password</string>
     <string name="usrHint">Username</string>
     <string name="loginBtn">Login</string>
     <string name="logoutMsg">Log Off</string>
     <string name="emailHint">Email</string>
+    <string name="usernameHint">Username</string>
+    <string name="username_required">Username is required</string>
+    <string name="password_required">Password is required</string>
+    <string name="processing">Processing</string>
+    <string name="please_wait">Please wait</string>
 </resources>

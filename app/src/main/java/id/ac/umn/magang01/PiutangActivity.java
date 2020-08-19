@@ -9,7 +9,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -31,8 +34,7 @@ public class PiutangActivity extends AppCompatActivity {
     private ProgressDialog prog;
     private ListView lv;
     EditText search;
-
-    private static String url = "http://119.235.208.235:8092/piutang_dagang_per_customer";
+    ImageView btnSearch;
 
     private ArrayList<HashMap<String, String>> contactlist;
 
@@ -41,30 +43,60 @@ public class PiutangActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_piutang);
 
-
         contactlist = new ArrayList<>();
         lv = findViewById(R.id.listView);
         lv.setTextFilterEnabled(true);
 
         new GetContacts().execute();
 
-        search = findViewById(R.id.inputSearch);
+//        search = findViewById(R.id.inputSearch);
+//        final String key = search.getText().toString().trim();
+//
+//        btnSearch = findViewById(R.id.btnSearch);
+//        btnSearch.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                searchFunc();
+//            }
+//        });
+    }
 
+//    private void searchFunc() {
+//    }
+
+    private void  showProgressDialog(){
+        if(prog == null){
+            prog = new ProgressDialog(PiutangActivity.this);
+            prog.setMessage("Fetching data...");
+            prog.setIndeterminate(false);
+            prog.setCancelable(false);
+        }
+        prog.show();
+    }
+
+    private void dismissProgressDialog() {
+        if (prog != null && prog.isShowing()) {
+            prog.dismiss();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        dismissProgressDialog();
+        super.onDestroy();
     }
 
     private class GetContacts extends AsyncTask<Void, Void, Void>{
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            // Showing progress dialog
-            prog = new ProgressDialog(PiutangActivity.this);
-            prog.setMessage("Fetching data...");
-            prog.setCancelable(false);
-            prog.show();
+            showProgressDialog();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
+
+            String url = "http://119.235.208.235:8092/piutang_dagang_per_customer";
             HttpHandler sh = new HttpHandler();
 //            Locale localeID = new Locale("in", "ID");
 //            NumberFormat formatRP = NumberFormat.getCurrencyInstance(localeID);
@@ -140,8 +172,10 @@ public class PiutangActivity extends AppCompatActivity {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             // Dismiss the progress dialog
-            if (prog.isShowing())
-                prog.dismiss();
+            if (PiutangActivity.this.isDestroyed()){
+                return;
+            }
+            dismissProgressDialog();
             /**
              * Updating parsed JSON data into ListView
              * */

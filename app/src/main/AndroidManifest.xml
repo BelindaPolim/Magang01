@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="id.ac.umn.magang01">
+
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,23 +14,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".ForgotEmailActivity"></activity>
         <activity
             android:name=".HutangActivity"
-            android:label="Hutang"></activity>
+            android:label="Hutang" />
         <activity
             android:name=".PiutangActivity"
             android:label="Piutang"
-            android:parentActivityName=".MainActivity"/>
-        <activity
-            android:name=".PembelianActivity"
-            android:label="Pembelian"/>
-        <activity
-            android:name=".PenjualanActivity"
-            android:label="Penjualan" />
-        <activity android:name=".RegisterActivity" />
-        <activity
-            android:name=".LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar.Fullscreen">
+            android:parentActivityName=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,7 +29,21 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".PembelianActivity"
+            android:label="Pembelian" />
+        <activity
+            android:name=".PenjualanActivity"
+            android:label="Penjualan" />
+        <activity
+            android:name=".LoginActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
+
+        </activity>
+        <activity
             android:name=".MainActivity"
-            android:label="Menu Utama" />
+            android:label="Menu Utama">
+
+        </activity>
     </application>
+
 </manifest>
