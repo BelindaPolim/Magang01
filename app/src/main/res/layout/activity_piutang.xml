@@ -78,11 +78,12 @@
                 android:inputType="text"
                 android:paddingStart="15dp"
                 android:paddingEnd="15dp"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/colorTextPrimary"
                 android:textSize="16sp"
                 android:importantForAutofill="no"/>
 
             <ImageView
+                android:id="@+id/imgSearch"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@drawable/search_icon_background"

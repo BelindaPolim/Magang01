@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
+        android:name=".MyApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -17,7 +18,8 @@
         <activity android:name=".ForgotEmailActivity"></activity>
         <activity
             android:name=".HutangActivity"
-            android:label="Hutang" />
+            android:label="Hutang"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".PiutangActivity"
             android:label="Piutang"
@@ -26,10 +28,12 @@
         </activity>
         <activity
             android:name=".PembelianActivity"
-            android:label="Pembelian" />
+            android:label="Pembelian"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".PenjualanActivity"
-            android:label="Penjualan" />
+            android:label="Penjualan"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".LoginActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">

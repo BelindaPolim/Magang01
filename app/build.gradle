@@ -41,5 +41,4 @@ dependencies {
     implementation 'com.amitshekhar.android:rx2-android-networking:1.0.2'
     // https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api
     implementation group: 'javax.annotation', name: 'javax.annotation-api', version: '1.2-b01'
-
 }

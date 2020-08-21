@@ -3,20 +3,27 @@ package id.ac.umn.magang01;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.pixplicity.easyprefs.library.Prefs;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,8 +31,11 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import static id.ac.umn.magang01.Setting.SP_TOKEN;
 
 public class PiutangActivity extends AppCompatActivity {
 
@@ -33,36 +43,80 @@ public class PiutangActivity extends AppCompatActivity {
 
     private ProgressDialog prog;
     private ListView lv;
-    EditText search;
-    ImageView btnSearch;
+    EditText etSearch;
+    ImageView imgBack, imgRefresh, imgSearch;
+//    String search;
 
-    private ArrayList<HashMap<String, String>> contactlist;
+    //    PiutangAdapter dataAdapter = null;
+//    private ArrayList<HashMap<String, String>> contactlist;
+    ArrayList<PiutangModel> items = new ArrayList<>();
+    ArrayList<PiutangModel> filtered = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_piutang);
 
-        contactlist = new ArrayList<>();
+        Intent i = getIntent();
+        final String search = i.getStringExtra("search");
+//        Toast.makeText(this, search.toUpperCase(), Toast.LENGTH_SHORT).show();
+//        contactlist = new ArrayList<>();
         lv = findViewById(R.id.listView);
         lv.setTextFilterEnabled(true);
+        etSearch = findViewById(R.id.inputSearch);
+        String cari = etSearch.getText().toString().trim();
+        new GetContacts().execute(cari);
 
-        new GetContacts().execute();
+        imgBack = findViewById(R.id.imgBack);
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getParent();
+                finish();
+            }
+        });
 
-//        search = findViewById(R.id.inputSearch);
-//        final String key = search.getText().toString().trim();
-//
-//        btnSearch = findViewById(R.id.btnSearch);
-//        btnSearch.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                searchFunc();
-//            }
-//        });
+        imgRefresh = findViewById(R.id.imgRefresh);
+        imgRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refreshData();
+            }
+        });
+
+        etSearch = findViewById(R.id.inputSearch);
+        etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH){
+                    items.clear();
+                    String cari = etSearch.getText().toString().trim();
+                    new GetContacts().execute(cari);
+                    return true;
+                }
+                return false;
+            }
+        });
+
+
+        imgSearch = findViewById(R.id.imgSearch);
+        imgSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                searchFunc(etSearch.getText().toString().trim());
+                items.clear();
+//                etSearch = findViewById(R.id.inputSearch);
+                String cari = etSearch.getText().toString().trim();
+                new GetContacts().execute(cari);
+            }
+        });
+
     }
 
-//    private void searchFunc() {
-//    }
+    private void refreshData() {
+        startActivity(new Intent(PiutangActivity.this, PiutangActivity.class));
+        finish();
+    }
 
     private void  showProgressDialog(){
         if(prog == null){
@@ -86,20 +140,21 @@ public class PiutangActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private class GetContacts extends AsyncTask<Void, Void, Void>{
+    private class GetContacts extends AsyncTask<String, Void, Void>{
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             showProgressDialog();
         }
 
-        @Override
-        protected Void doInBackground(Void... voids) {
 
-            String url = "http://119.235.208.235:8092/piutang_dagang_per_customer";
+        @Override
+        protected Void doInBackground(String... strings) {
             HttpHandler sh = new HttpHandler();
-//            Locale localeID = new Locale("in", "ID");
-//            NumberFormat formatRP = NumberFormat.getCurrencyInstance(localeID);
+
+            // Making a request to url and getting response
+            String url = "http://119.235.208.235:8092/piutang_dagang_per_customer";
+            String jsonStr = sh.makeServiceCall(url);
 
             DecimalFormat pemisahRibuan = (DecimalFormat) DecimalFormat.getCurrencyInstance();
             DecimalFormatSymbols formatPemisah = new DecimalFormatSymbols();
@@ -110,8 +165,8 @@ public class PiutangActivity extends AppCompatActivity {
 
             pemisahRibuan.setDecimalFormatSymbols(formatPemisah);
 
-            // Making a request to url and getting response
-            String jsonStr = sh.makeServiceCall(url);
+            if(jsonStr == null) Log.e(TAG, "napa dah");
+
             Log.e(TAG, "Response from url: " + jsonStr);
 
             if (jsonStr != null) {
@@ -128,17 +183,22 @@ public class PiutangActivity extends AppCompatActivity {
                         String name = c.getString("FullName");
                         int sisaPiutang = c.getInt("SisaPiutang");
 
-                        // tmp hash map for single contact
-                        HashMap<String, String> contact = new HashMap<>();
+                        String sisa = pemisahRibuan.format(sisaPiutang);
 
-                        // adding each child node to HashMap key => value
-                        contact.put("id", id);
-                        contact.put("name", name);
-                        contact.put("sisaPiutang", pemisahRibuan.format((double)sisaPiutang));
-
-                        // adding contact to contact list
-                        contactlist.add(contact);
+                        String search = strings[0];
+                        if(search.isEmpty()){
+                            items.add(new PiutangModel(id, name, pemisahRibuan.format(sisaPiutang).substring(0, sisa.length()-3)));
+                        }
+                        else if(name.contains(search.toUpperCase())) {
+                            items.add(new PiutangModel(id, name, pemisahRibuan.format(sisaPiutang).substring(0, sisa.length()-3)));
+                        }
+                        else {
+//                            items.add(new PiutangModel(id, name, sisaPiutang));
+                        }
                     }
+//                    if(items == null){
+//                        items.add(new PiutangModel("", "Tidak ditemukan", 0));
+//                    }
                 } catch (final JSONException e) {
                     Log.e(TAG, "Json parsing error: " + e.getMessage());
                     runOnUiThread(new Runnable() {
@@ -163,10 +223,10 @@ public class PiutangActivity extends AppCompatActivity {
                                 .show();
                     }
                 });
-
             }
             return null;
         }
+
 
         @Override
         protected void onPostExecute(Void result) {
@@ -176,31 +236,8 @@ public class PiutangActivity extends AppCompatActivity {
                 return;
             }
             dismissProgressDialog();
-            /**
-             * Updating parsed JSON data into ListView
-             * */
-            ListAdapter adapter = new SimpleAdapter(
-                    PiutangActivity.this, contactlist,
-                    R.layout.list_piutang, new String[]{"ID", "name",
-                    "sisaPiutang"}, new int[]{R.id.custID,
-                    R.id.custName, R.id.sisaPiutang});
-            lv.setAdapter(adapter);
-        }
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_piutang, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_refresh) {
-            startActivity(new Intent(PiutangActivity.this, PiutangActivity.class));
-            finish();
-            return true;
+            lv.setAdapter(new PiutangAdapter(PiutangActivity.this, R.layout.list_piutang, items));
         }
-        return super.onOptionsItemSelected(item);
     }
 }

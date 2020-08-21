@@ -1,16 +1,13 @@
 package id.ac.umn.magang01;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 //import android.support.design.widget.TextInputEditText;
@@ -25,15 +22,19 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.ParsedRequestListener;
+
 import id.ac.umn.magang01.MainActivity;
 import id.ac.umn.magang01.R;
 import id.ac.umn.magang01.Setting;
@@ -51,10 +52,9 @@ import static id.ac.umn.magang01.Setting.SP_USER;
 public class LoginActivity extends AppCompatActivity {
     public final static int MY_PERMISSIONS_REQUEST_READ_PHONE_STATE = 0;
     Context c;
-    Button btnLogin;
 
     TextInputEditText etUserId, etPassword;
-    TextView forgotPwd;
+    TextView forgotPw;
     ProgressDialog pd;
     String username,password;
     String nik;
@@ -68,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
+    Button btnLogin;
 
     private boolean checkPermissions() {
         int result;
@@ -88,7 +89,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
 
         setContentView(R.layout.activity_login);
 
@@ -96,6 +96,7 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.inputPass);
 
         ivClear1 = findViewById(R.id.ivClear);
+
         ivClear1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,14 +115,17 @@ public class LoginActivity extends AppCompatActivity {
         chkShowHide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 chkShowHide.setActivated(!chkShowHide.isActivated());
                 showHide();
             }
         });
+        //dummy
         etUserId.setText("");
+//        t1.setText("120002");
         etPassword.setText("");
         c=this;
-        loadIMEI();
+//        loadIMEI();
         btnLogin = findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,14 +134,13 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        forgotPwd = findViewById(R.id.textForgotPwd);
-        forgotPwd.setOnClickListener(new View.OnClickListener() {
+        forgotPw = findViewById(R.id.textForgotPwd);
+        forgotPw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 forgotPasswordbyEmail(v);
             }
         });
-
     }
     public void showHide(){
         if(chkShowHide.isChecked())
@@ -147,9 +150,9 @@ public class LoginActivity extends AppCompatActivity {
         else
         {
             etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
-
         }
     }
+
 
 //    public void forgotPasswordbySMS(View view) {
 //        nik = etUserId.getText().toString();
@@ -162,6 +165,7 @@ public class LoginActivity extends AppCompatActivity {
 //        }else {
 //            Toast.makeText(this, "Silahkan masukan username / nik", Toast.LENGTH_SHORT).show();
 //        }
+//
 //    }
 
     public void forgotPasswordbyEmail(View view) {
@@ -198,6 +202,8 @@ public class LoginActivity extends AppCompatActivity {
         pd.setCancelable(false);
         pd.show();
 //        checkimei();
+
+        initLogin();
     }
 //    private void checkimei() {
 //        AndroidNetworking.post(Setting.API_Check_Imei)
@@ -268,7 +274,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onError(ANError anError) {
                         pd.dismiss();
                         if (anError.getErrorCode()==403){
-                            Toast.makeText(LoginActivity.this, "Password atau NIK salah", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Username atau password salah", Toast.LENGTH_SHORT).show();
                             Log.d("cekUrl", "onError errorCode : " + anError.getErrorCode());
                             Log.d("cekUrl", "onError errorBody : " + anError.getErrorBody());
                             Log.d("cekUrl", "onError errorDetail : " + anError.getErrorDetail());
@@ -302,7 +308,7 @@ public class LoginActivity extends AppCompatActivity {
             requestReadPhoneStatePermission();
         } else {
             // READ_PHONE_STATE permission is already been granted.
-//            doPermissionGrantedStuffs();
+            doPermissionGrantedStuffs();
         }
     }
     private void requestReadPhoneStatePermission() {
@@ -329,6 +335,11 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Callback received when a permissions request has been completed.
+     */
+
+
     private void alertAlert(String msg) {
         new AlertDialog.Builder(c)
                 .setTitle("Permission Request")
@@ -342,6 +353,7 @@ public class LoginActivity extends AppCompatActivity {
                 .setIcon(R.mipmap.ic_launcher)
                 .show();
     }
+
 
     public void doPermissionGrantedStuffs() {
         //Have an  object of TelephonyManager
@@ -426,7 +438,7 @@ public class LoginActivity extends AppCompatActivity {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
                 requestReadPhoneStatePermission();
             }
-//            deviceUniqueIdentifier = tm.getDeviceId();
+            deviceUniqueIdentifier = tm.getDeviceId();
         }
         if (null == deviceUniqueIdentifier || 0 == deviceUniqueIdentifier.length()) {
             deviceUniqueIdentifier = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -434,4 +446,6 @@ public class LoginActivity extends AppCompatActivity {
         imei=deviceUniqueIdentifier;
         Log.d("imei =",imei);
     }
+
 }
+
