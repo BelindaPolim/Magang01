@@ -15,6 +15,10 @@ import android.widget.Toast;
 
 //import com.google.firebase.auth.FirebaseAuth;
 
+import com.pixplicity.easyprefs.library.Prefs;
+
+import static id.ac.umn.magang01.Setting.SP_TOKEN;
+
 public class MainActivity extends AppCompatActivity {
     LinearLayout llPenjualan, llPembelian, llPiutang, llHutang;
     ImageView btnLogout;
@@ -43,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onMenuItemClick(MenuItem item) {
                         Toast.makeText(MainActivity.this, "Logged out", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                        Prefs.remove(SP_TOKEN);
                         finish();
                         return true;
                     }

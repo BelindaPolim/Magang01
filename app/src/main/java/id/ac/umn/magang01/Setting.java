@@ -1,8 +1,6 @@
 package id.ac.umn.magang01;
 
 public class Setting {
-//    public static final String IP = "http://119.235.208.235/employeeess";
-
 
     // YSL
     public static final String IP = "http://119.235.208.235:8092/";
@@ -15,6 +13,7 @@ public class Setting {
     public static final String API_Email = API + "email";
 
     public static final String API_Profile_Forgot = API + "profile-forgot";
+    public static final String API_Piutang_Dagang = API + "piutang_dagang_per_customer";
 
     //shared preference
     public static final String SP_TOKEN = "user_token";

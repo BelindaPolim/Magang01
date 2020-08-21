@@ -2,6 +2,8 @@ package id.ac.umn.magang01;
 
 import android.util.Log;
 
+import com.pixplicity.easyprefs.library.Prefs;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,6 +13,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+
+import static id.ac.umn.magang01.Setting.SP_TOKEN;
 
 public class HttpHandler {
 
@@ -24,7 +28,9 @@ public class HttpHandler {
         try {
             URL url = new URL(reqUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestProperty("Authorization", "Bearer" + Prefs.getString(SP_TOKEN, ""));
             conn.setRequestMethod("GET");
+//            conn.setRequestProperty("token", Prefs.getString(SP_TOKEN,""));
             // read the response
             InputStream in = new BufferedInputStream(conn.getInputStream());
             response = convertStreamToString(in);

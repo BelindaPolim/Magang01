@@ -2,6 +2,7 @@ package id.ac.umn.magang01;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +24,11 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.androidnetworking.interfaces.ParsedRequestListener;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import org.json.JSONArray;
@@ -140,20 +146,20 @@ public class PiutangActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private class GetContacts extends AsyncTask<String, Void, Void>{
+    private class GetContacts extends AsyncTask<String, Void, Void> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             showProgressDialog();
         }
 
-
         @Override
         protected Void doInBackground(String... strings) {
             HttpHandler sh = new HttpHandler();
 
             // Making a request to url and getting response
-            String url = "http://119.235.208.235:8092/piutang_dagang_per_customer";
+//            String url = "http://119.235.208.235:8092/piutang_dagang_per_customer";
+            String url = Setting.API_Piutang_Dagang;
             String jsonStr = sh.makeServiceCall(url);
 
             DecimalFormat pemisahRibuan = (DecimalFormat) DecimalFormat.getCurrencyInstance();
@@ -165,7 +171,7 @@ public class PiutangActivity extends AppCompatActivity {
 
             pemisahRibuan.setDecimalFormatSymbols(formatPemisah);
 
-            if(jsonStr == null) Log.e(TAG, "napa dah");
+            if(jsonStr == null) Log.e(TAG, "JSON null");
 
             Log.e(TAG, "Response from url: " + jsonStr);
 
