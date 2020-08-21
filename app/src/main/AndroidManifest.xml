@@ -37,16 +37,16 @@
         <activity
             android:name=".LoginActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
-
-        </activity>
-        <activity
-            android:name=".MainActivity"
-            android:label="Menu Utama">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:label="Menu Utama">
+
         </activity>
     </application>
 
