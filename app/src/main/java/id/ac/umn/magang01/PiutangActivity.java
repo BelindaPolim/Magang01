@@ -55,16 +55,16 @@ public class PiutangActivity extends AppCompatActivity {
 
     //    PiutangAdapter dataAdapter = null;
 //    private ArrayList<HashMap<String, String>> contactlist;
-    ArrayList<PiutangModel> items = new ArrayList<>();
-    ArrayList<PiutangModel> filtered = new ArrayList<>();
+    ArrayList<PiutangModel> piutang = new ArrayList<>();
+//    ArrayList<PiutangModel> filtered = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_piutang);
 
-        Intent i = getIntent();
-        final String search = i.getStringExtra("search");
+//        Intent i = getIntent();
+//        final String search = i.getStringExtra("search");
 //        Toast.makeText(this, search.toUpperCase(), Toast.LENGTH_SHORT).show();
 //        contactlist = new ArrayList<>();
         lv = findViewById(R.id.listView);
@@ -95,7 +95,7 @@ public class PiutangActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH){
-                    items.clear();
+                    piutang.clear();
                     String cari = etSearch.getText().toString().trim();
                     new GetContacts().execute(cari);
                     return true;
@@ -110,7 +110,7 @@ public class PiutangActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 //                searchFunc(etSearch.getText().toString().trim());
-                items.clear();
+                piutang.clear();
 //                etSearch = findViewById(R.id.inputSearch);
                 String cari = etSearch.getText().toString().trim();
                 new GetContacts().execute(cari);
@@ -193,17 +193,17 @@ public class PiutangActivity extends AppCompatActivity {
 
                         String search = strings[0];
                         if(search.isEmpty()){
-                            items.add(new PiutangModel(id, name, pemisahRibuan.format(sisaPiutang).substring(0, sisa.length()-3)));
+                            piutang.add(new PiutangModel(id, name, pemisahRibuan.format(sisaPiutang).substring(0, sisa.length()-3)));
                         }
                         else if(name.contains(search.toUpperCase())) {
-                            items.add(new PiutangModel(id, name, pemisahRibuan.format(sisaPiutang).substring(0, sisa.length()-3)));
+                            piutang.add(new PiutangModel(id, name, pemisahRibuan.format(sisaPiutang).substring(0, sisa.length()-3)));
                         }
                         else {
-//                            items.add(new PiutangModel(id, name, sisaPiutang));
+//                            piutang.add(new PiutangModel(id, name, sisaPiutang));
                         }
                     }
-//                    if(items == null){
-//                        items.add(new PiutangModel("", "Tidak ditemukan", 0));
+//                    if(piutang == null){
+//                        piutang.add(new PiutangModel("", "Tidak ditemukan", 0));
 //                    }
                 } catch (final JSONException e) {
                     Log.e(TAG, "Json parsing error: " + e.getMessage());
@@ -243,7 +243,7 @@ public class PiutangActivity extends AppCompatActivity {
             }
             dismissProgressDialog();
 
-            lv.setAdapter(new PiutangAdapter(PiutangActivity.this, R.layout.list_piutang, items));
+            lv.setAdapter(new PiutangAdapter(PiutangActivity.this, R.layout.list_piutang, piutang));
         }
     }
 }

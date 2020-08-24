@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ForgotEmailActivity"></activity>
+        <activity android:name=".ForgotEmailActivity"/>
         <activity
             android:name=".HutangActivity"
             android:label="Hutang"
