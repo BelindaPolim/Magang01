@@ -7,9 +7,8 @@
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     android:paddingTop="10dp">
-
     <TextView
-        android:id="@+id/suppName"
+        android:id="@+id/custName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="8dp"
@@ -20,7 +19,7 @@
         android:layout_alignParentStart="true"/>
 
     <TextView
-        android:id="@+id/nilaiPembelian"
+        android:id="@+id/nilaiPenjualan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="8dp"
@@ -29,5 +28,5 @@
         android:textStyle="bold"
         android:textColor="@color/itemuda"
         android:layout_alignParentEnd="true"
-        android:layout_toStartOf="@+id/suppName"/>
+        android:layout_toStartOf="@+id/custName"/>
 </RelativeLayout>
