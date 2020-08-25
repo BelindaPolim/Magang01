@@ -4,47 +4,50 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 
-public class PenjualanActivity extends AppCompatActivity {
 
-    private String TAG = PenjualanActivity.class.getSimpleName();
+public class ChartPembelian extends AppCompatActivity {
+
+    private String TAG = ChartPembelian.class.getSimpleName();
 
     private ProgressDialog prog;
-    private ListView lv;
-    EditText etSearch;
-    ImageView imgBack, imgRefresh, imgSearch;
+    ImageView imgBack;
+    TextView namaSupp;
 
-    ArrayList<PenjualanModel> penjualan = new ArrayList<>();
+    //    ArrayList<PembelianModel> pembelian = new ArrayList<>();
+    ArrayList<BarEntry> pembelian = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_penjualan);
-
-        lv = findViewById(R.id.listView);
-        lv.setTextFilterEnabled(true);
-        etSearch = findViewById(R.id.inputSearch);
-        String cari = etSearch.getText().toString().trim();
-        new GetContacts().execute(cari);
+        setContentView(R.layout.chart_pembelian);
 
         imgBack = findViewById(R.id.imgBack);
         imgBack.setOnClickListener(new View.OnClickListener() {
@@ -55,47 +58,52 @@ public class PenjualanActivity extends AppCompatActivity {
             }
         });
 
-        imgRefresh = findViewById(R.id.imgRefresh);
-        imgRefresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                refreshData();
-            }
-        });
+        Intent getPosition = getIntent();
+        String name = getPosition.getStringExtra("nama");
+        new GetContacts().execute(name);
 
-        etSearch = findViewById(R.id.inputSearch);
-        etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH){
-                    penjualan.clear();
-                    String cari = etSearch.getText().toString().trim();
-                    new GetContacts().execute(cari);
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        imgSearch = findViewById(R.id.imgSearch);
-        imgSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                penjualan.clear();
-                String cari = etSearch.getText().toString().trim();
-                new GetContacts().execute(cari);
-            }
-        });
+        namaSupp = findViewById(R.id.suppName);
+        namaSupp.setText(name);
     }
 
-    private void refreshData() {
-        startActivity(new Intent(PenjualanActivity.this, PenjualanActivity.class));
-        finish();
+    private void callBarChart(){
+        float barWidth = 0.45f;
+
+        BarChart barChart = findViewById(R.id.chart);
+
+        BarDataSet barDataSet = new BarDataSet(pembelian, "Nilai pembelian per bulan");
+//            barDataSet.setColor(ColorTemplate.MATERIAL_COLORS[1]);
+        barDataSet.setValueTextColor(Color.BLACK);
+        barDataSet.setValueTextSize(16f);
+
+        BarData barData = new BarData(barDataSet);
+
+        // Pengaturan sumbu X
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM.BOTTOM);
+        xAxis.setCenterAxisLabels(false);
+
+        // Agar ketika di zoom tidak menjadi pecahan
+        xAxis.setGranularity(1f);
+
+        //Menghilangkan sumbu Y yang ada di sebelah kanan
+        barChart.getAxisRight().setEnabled(false);
+
+        // Menghilankan deskripsi pada Chart
+        barChart.getDescription().setEnabled(false);
+
+        barChart.setFitBars(true);
+        barChart.setData(barData);
+        barChart.getBarData().setBarWidth(barWidth);
+        barChart.animateY(2000);
+        barChart.setDragEnabled(true);
+        barChart.setPinchZoom(true);
+        barChart.invalidate();
     }
 
     private void  showProgressDialog(){
         if(prog == null){
-            prog = new ProgressDialog(PenjualanActivity.this);
+            prog = new ProgressDialog(ChartPembelian.this);
             prog.setMessage("Fetching data...");
             prog.setIndeterminate(false);
             prog.setCancelable(false);
@@ -126,7 +134,7 @@ public class PenjualanActivity extends AppCompatActivity {
         protected Void doInBackground(String... strings) {
             HttpHandler sh = new HttpHandler();
 
-            String url = Setting.API_Penjualan_Dagang + "?" + "FromTahunBulan=202006" + "&" + "ToTahunBulan=202008" + "&" + "PerBulan=0";
+            String url = Setting.API_Pembelian_Dagang + "?" + "FromTahunBulan=202006" + "&" + "ToTahunBulan=202008" + "&" + "PerBulan=1";
             String jsonStr = sh.makeServiceCall(url);
 
             DecimalFormat pemisahRibuan = (DecimalFormat) DecimalFormat.getCurrencyInstance();
@@ -152,20 +160,19 @@ public class PenjualanActivity extends AppCompatActivity {
                     for (int i = 0; i < contacts.length(); i++) {
                         JSONObject c = contacts.getJSONObject(i);
 
-                        String id = c.getString("CustCode");
+                        String id = c.getString("SuppCode");
                         String name = c.getString("FullName");
-//                        String yrmonth = c.getString("TahunBulan");
-                        int nilaiPenjualan = c.getInt("NilaiPenjualan");
-
-                        String nilai = pemisahRibuan.format(nilaiPenjualan);
+                        String yrMonth = c.getString("TahunBulan");
+                        long nilaiPembelian = c.getLong("NilaiPembelian");
 
                         String search = strings[0];
-                        if(search.isEmpty()){
-                            penjualan.add(new PenjualanModel(id, name, pemisahRibuan.format(nilaiPenjualan).substring(0, nilai.length()-3)));
+
+                        if(name.equals(search.toUpperCase())){
+                            pembelian.add(new BarEntry(Float.parseFloat(yrMonth), nilaiPembelian));
                         }
-                        else if(name.contains(search.toUpperCase())) {
-                            penjualan.add(new PenjualanModel(id, name, pemisahRibuan.format(nilaiPenjualan).substring(0, nilai.length()-3)));
-                        }
+//                        else if(name.contains(search.toUpperCase())) {
+//                            pembelian.add(new PembelianModel(id, name, pemisahRibuan.format(nilaiPembelian).substring(0, nilai.length()-3)));
+//                        }
                     }
 
                 } catch (final JSONException e) {
@@ -201,12 +208,12 @@ public class PenjualanActivity extends AppCompatActivity {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             // Dismiss the progress dialog
-            if (PenjualanActivity.this.isDestroyed()){
+            if (ChartPembelian.this.isDestroyed()){
                 return;
             }
             dismissProgressDialog();
 
-            lv.setAdapter(new PenjualanAdapter(PenjualanActivity.this, R.layout.list_penjualan, penjualan));
+            callBarChart();
         }
     }
 }

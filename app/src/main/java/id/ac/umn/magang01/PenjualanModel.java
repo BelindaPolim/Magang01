@@ -7,15 +7,15 @@ public class PenjualanModel {
     private String mID;
     @SerializedName("name")
     private String mName;
-    @SerializedName("yearDate")
-    private String mYrMonth;
+//    @SerializedName("yearDate")
+//    private String mYrMonth;
     @SerializedName("nilaiPenjualan")
     private String mNilai;
 
-    public PenjualanModel(String id, String name, String yrMonth, String nilaiPenjualan){
+    public PenjualanModel(String id, String name, String nilaiPenjualan){
         mID = id;
         mName = name;
-        mYrMonth = yrMonth;
+//        mYrMonth = yrMonth;
         mNilai = nilaiPenjualan;
     }
 
@@ -25,9 +25,9 @@ public class PenjualanModel {
     public String getName(){
         return mName;
     }
-    public String getYrMonth() {
-        return mYrMonth;
-    }
+//    public String getYrMonth() {
+//        return mYrMonth;
+//    }
     public String getNilai(){
         return mNilai;
     }

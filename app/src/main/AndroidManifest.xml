@@ -3,7 +3,6 @@
     package="id.ac.umn.magang01">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
@@ -15,25 +14,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ForgotEmailActivity"/>
+        <activity android:name=".ChartPembelian"></activity>
+        <activity android:name=".ForgotEmailActivity" />
         <activity
             android:name=".HutangActivity"
             android:label="Hutang"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".PiutangActivity"
             android:label="Piutang"
-            android:parentActivityName=".MainActivity">
-
-        </activity>
+            android:parentActivityName=".MainActivity"></activity>
         <activity
             android:name=".PembelianActivity"
             android:label="Pembelian"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".PenjualanActivity"
             android:label="Penjualan"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".LoginActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
@@ -45,9 +43,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:label="Menu Utama">
-
-        </activity>
+            android:label="Menu Utama"></activity>
     </application>
 
 </manifest>

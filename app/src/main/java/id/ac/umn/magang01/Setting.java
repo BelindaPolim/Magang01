@@ -15,8 +15,8 @@ public class Setting {
     public static final String API_Profile_Forgot = API + "profile-forgot";
     public static final String API_Piutang_Dagang = API + "piutang_dagang_per_customer";
     public static final String API_Hutang_Dagang = API + "hutang_dagang_per_supplier";
-    public static final String API_Pembelian_Dagang = API + "pembelian_per_supplier?FromTahunBulan=202006&ToTahunBulan=202008&PerBulan=1";
-    public static final String API_Penjualan_Dagang = API + "penjualan_per_customer?FromTahunBulan=202006&ToTahunBulan=202008&PerBulan=1";
+    public static final String API_Pembelian_Dagang = API + "pembelian_per_supplier";
+    public static final String API_Penjualan_Dagang = API + "penjualan_per_customer";
 
     //shared preference
     public static final String SP_TOKEN = "user_token";

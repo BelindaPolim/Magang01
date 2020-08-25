@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -86,6 +87,17 @@ public class PembelianActivity extends AppCompatActivity {
                 new GetContacts().execute(cari);
             }
         });
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent chartPembelian = new Intent(PembelianActivity.this, ChartPembelian.class);
+                String nama = pembelian.get(position).getName();
+                chartPembelian.putExtra("nama", nama);
+//                Toast.makeText(PembelianActivity.this, nama, Toast.LENGTH_SHORT).show();
+                startActivity(chartPembelian);
+            }
+        });
     }
 
     private void refreshData() {
@@ -126,7 +138,7 @@ public class PembelianActivity extends AppCompatActivity {
         protected Void doInBackground(String... strings) {
             HttpHandler sh = new HttpHandler();
 
-            String url = Setting.API_Pembelian_Dagang;
+            String url = Setting.API_Pembelian_Dagang + "?" + "FromTahunBulan=202006" + "&" + "ToTahunBulan=202008" + "&" + "PerBulan=0";
             String jsonStr = sh.makeServiceCall(url);
 
             DecimalFormat pemisahRibuan = (DecimalFormat) DecimalFormat.getCurrencyInstance();
@@ -154,17 +166,16 @@ public class PembelianActivity extends AppCompatActivity {
 
                         String id = c.getString("SuppCode");
                         String name = c.getString("FullName");
-                        String yrmonth = c.getString("TahunBulan");
                         int nilaiPembelian = c.getInt("NilaiPembelian");
 
                         String nilai = pemisahRibuan.format(nilaiPembelian);
 
                         String search = strings[0];
                         if(search.isEmpty()){
-                            pembelian.add(new PembelianModel(id, name, yrmonth, pemisahRibuan.format(nilaiPembelian).substring(0, nilai.length()-3)));
+                            pembelian.add(new PembelianModel(id, name, pemisahRibuan.format(nilaiPembelian).substring(0, nilai.length()-3)));
                         }
                         else if(name.contains(search.toUpperCase())) {
-                            pembelian.add(new PembelianModel(id, name, yrmonth, pemisahRibuan.format(nilaiPembelian).substring(0, nilai.length()-3)));
+                            pembelian.add(new PembelianModel(id, name, pemisahRibuan.format(nilaiPembelian).substring(0, nilai.length()-3)));
                         }
                     }
 
