@@ -2,7 +2,9 @@ package id.ac.umn.magang01;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -88,14 +90,42 @@ public class PembelianActivity extends AppCompatActivity {
             }
         });
 
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Intent chartPembelian = new Intent(PembelianActivity.this, ChartPembelian.class);
+//                String nama = pembelian.get(position).getName();
+//                chartPembelian.putExtra("nama", nama);
+////                Toast.makeText(PembelianActivity.this, nama, Toast.LENGTH_SHORT).show();
+//                startActivity(chartPembelian);
+//            }
+//        });
+
+        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent chartPembelian = new Intent(PembelianActivity.this, ChartPembelian.class);
-                String nama = pembelian.get(position).getName();
-                chartPembelian.putExtra("nama", nama);
-//                Toast.makeText(PembelianActivity.this, nama, Toast.LENGTH_SHORT).show();
-                startActivity(chartPembelian);
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                final String[] choices = {"Informasi tambahan", "Grafik pembelian per bulan"};
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(PembelianActivity.this);
+                builder.setItems(choices, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == 0){
+                            Intent infoTambahan = new Intent(PembelianActivity.this, InformasiTambahan.class);
+                            String nama = pembelian.get(position).getName();
+                            infoTambahan.putExtra("nama", nama);
+                            startActivity(infoTambahan);
+                        }
+                        if (which == 1){
+                            Intent chartPembelian = new Intent(PembelianActivity.this, ChartPembelian.class);
+                            String nama = pembelian.get(position).getName();
+                            chartPembelian.putExtra("nama", nama);
+                            startActivity(chartPembelian);
+                        }
+                    }
+                });
+                builder.show();
+                return true;
             }
         });
     }

@@ -21,15 +21,12 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -37,25 +34,22 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
+public class ChartPenjualan extends AppCompatActivity {
 
-public class ChartPembelian extends AppCompatActivity {
-
-    private String TAG = ChartPembelian.class.getSimpleName();
+    private String TAG = ChartPenjualan.class.getSimpleName();
 
     private ProgressDialog prog;
     ImageView imgBack;
-    TextView namaSupp;
+    TextView namaCust;
     String label;
 
-    //    ArrayList<PembelianModel> pembelian = new ArrayList<>();
-    ArrayList<BarEntry> pembelian = new ArrayList<>();
+    ArrayList<BarEntry> penjualan = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.chart_pembelian);
+        setContentView(R.layout.chart_penjualan);
 
         imgBack = findViewById(R.id.imgBack);
         imgBack.setOnClickListener(new View.OnClickListener() {
@@ -70,20 +64,17 @@ public class ChartPembelian extends AppCompatActivity {
         String name = getPosition.getStringExtra("nama");
         new GetContacts().execute(name);
 
-        namaSupp = findViewById(R.id.suppName);
-        namaSupp.setText(name);
+        namaCust = findViewById(R.id.custName);
+        namaCust.setText(name);
     }
 
     public class LabelFormatter implements IAxisValueFormatter {
+        //        private final String[] mLabels;
 //        private final String[] mLabels;
-        private final String[] mLabels;
-
+//
 //        public LabelFormatter(String[] labels) {
 //            mLabels = labels;
 //        }
-        public LabelFormatter(String[] labels) {
-            mLabels = labels;
-        }
 
         @Override
         public String getFormattedValue(float value, AxisBase axis) {
@@ -100,15 +91,6 @@ public class ChartPembelian extends AppCompatActivity {
             }
 
             return label;
-//            value = (int) value;
-//            if (value == 202006){
-//                return mLabels[0];
-//            }
-//            if (value == 202007){
-//                return mLabels[1];
-//            }
-//            else
-//                return mLabels[2];
         }
     }
 
@@ -117,24 +99,16 @@ public class ChartPembelian extends AppCompatActivity {
 
         BarChart barChart = findViewById(R.id.chart);
 
-//        ArrayList<String> labels = new ArrayList<String>();
-//        labels.add("Jun 2020");
-//        labels.add("Jul 2020");
-//        labels.add("Aug 2020");
-
-        BarDataSet barDataSet = new BarDataSet(pembelian, "Nilai pembelian per bulan");
-
+        BarDataSet barDataSet = new BarDataSet(penjualan, "Nilai penjualan per bulan");
         String[] labels = {};
 
-//        BarData barData = new BarData((IBarDataSet) labels, barDataSet);
         BarData barData = new BarData(barDataSet);
         barChart.setData(barData);
         barDataSet.setColor(ColorTemplate.MATERIAL_COLORS[1]);
         barDataSet.setValueTextColor(Color.BLACK);
         barDataSet.setValueTextSize(16f);
 
-//        barChart.getXAxis().setValueFormatter(new LabelFormatter(labels));
-        barChart.getXAxis().setValueFormatter(new LabelFormatter(labels));
+        barChart.getXAxis().setValueFormatter(new LabelFormatter());
 
         // Pengaturan sumbu X
         XAxis xAxis = barChart.getXAxis();
@@ -166,7 +140,7 @@ public class ChartPembelian extends AppCompatActivity {
 
     private void  showProgressDialog(){
         if(prog == null){
-            prog = new ProgressDialog(ChartPembelian.this);
+            prog = new ProgressDialog(ChartPenjualan.this);
             prog.setMessage("Fetching data...");
             prog.setIndeterminate(false);
             prog.setCancelable(false);
@@ -197,7 +171,7 @@ public class ChartPembelian extends AppCompatActivity {
         protected Void doInBackground(String... strings) {
             HttpHandler sh = new HttpHandler();
 
-            String url = Setting.API_Pembelian_Dagang + "?" + "FromTahunBulan=202006" + "&" + "ToTahunBulan=202008" + "&" + "PerBulan=1";
+            String url = Setting.API_Penjualan_Dagang + "?" + "FromTahunBulan=201906" + "&" + "ToTahunBulan=201908" + "&" + "PerBulan=1";
             String jsonStr = sh.makeServiceCall(url);
 
             DecimalFormat pemisahRibuan = (DecimalFormat) DecimalFormat.getCurrencyInstance();
@@ -223,22 +197,18 @@ public class ChartPembelian extends AppCompatActivity {
                     for (int i = 0; i < contacts.length(); i++) {
                         JSONObject c = contacts.getJSONObject(i);
 
-                        String id = c.getString("SuppCode");
+                        String id = c.getString("CustCode");
                         String name = c.getString("FullName");
                         String yrMonth = c.getString("TahunBulan");
-                        long nilaiPembelian = c.getLong("NilaiPembelian");
+                        long nilaiPenjualan = c.getLong("NilaiPenjualan");
 
                         String search = strings[0];
 
-//                        DateFormat inputFormat = new SimpleDateFormat("yyyy-MM");
-//                        DateFormat outputFormat = new SimpleDateFormat("MMM yyyy");
-
                         if(name.equals(search.toUpperCase())){
-//                            Date date = inputFormat.parse(inputDateStr);
-                            pembelian.add(new BarEntry(Float.parseFloat(yrMonth), nilaiPembelian));
+                            penjualan.add(new BarEntry(Float.parseFloat(yrMonth), nilaiPenjualan));
                         }
 //                        else if(name.contains(search.toUpperCase())) {
-//                            pembelian.add(new PembelianModel(id, name, pemisahRibuan.format(nilaiPembelian).substring(0, nilai.length()-3)));
+//                            penjualan.add(new PenjualanModel(id, name, pemisahRibuan.format(nilaiPenjualan).substring(0, nilai.length()-3)));
 //                        }
                     }
 
@@ -274,8 +244,9 @@ public class ChartPembelian extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
+
             // Dismiss the progress dialog
-            if (ChartPembelian.this.isDestroyed()){
+            if (ChartPenjualan.this.isDestroyed()){
                 return;
             }
             dismissProgressDialog();

@@ -14,7 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ChartPembelian"></activity>
+        <activity android:name=".InformasiTambahan"></activity>
+        <activity android:name=".ChartPenjualan" />
+        <activity android:name=".ChartPembelian" />
         <activity android:name=".ForgotEmailActivity" />
         <activity
             android:name=".HutangActivity"
@@ -23,7 +25,7 @@
         <activity
             android:name=".PiutangActivity"
             android:label="Piutang"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".PembelianActivity"
             android:label="Pembelian"
@@ -43,7 +45,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:label="Menu Utama"></activity>
+            android:label="Menu Utama" />
     </application>
 
 </manifest>

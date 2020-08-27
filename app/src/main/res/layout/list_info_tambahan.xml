@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="10dp">
+
+    <TextView
+        android:id="@+id/infoName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
+        android:text="Informasi"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/itemuda"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:id="@+id/infoValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
+        android:text="Value informasi"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/itemuda"
+        android:layout_alignParentEnd="true"
+        android:layout_toStartOf="@id/infoName"/>
+</RelativeLayout>

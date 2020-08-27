@@ -2,7 +2,9 @@ package id.ac.umn.magang01;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -84,6 +87,44 @@ public class PenjualanActivity extends AppCompatActivity {
                 penjualan.clear();
                 String cari = etSearch.getText().toString().trim();
                 new GetContacts().execute(cari);
+            }
+        });
+
+        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent chartPenjualan = new Intent(PenjualanActivity.this, ChartPenjualan.class);
+                String nama = penjualan.get(position).getName();
+                chartPenjualan.putExtra("nama", nama);
+                startActivity(chartPenjualan);
+                return false;
+            }
+        });
+        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                final String[] choices = {"Informasi tambahan", "Grafik penjualan per bulan"};
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(PenjualanActivity.this);
+                builder.setItems(choices, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == 0){
+                            Intent infoTambahan = new Intent(PenjualanActivity.this, InformasiTambahan.class);
+                            String nama = penjualan.get(position).getName();
+                            infoTambahan.putExtra("nama", nama);
+                            startActivity(infoTambahan);
+                        }
+                        if (which == 1){
+                            Intent chartPenjualan = new Intent(PenjualanActivity.this, ChartPenjualan.class);
+                            String nama = penjualan.get(position).getName();
+                            chartPenjualan.putExtra("nama", nama);
+                            startActivity(chartPenjualan);
+                        }
+                    }
+                });
+                builder.show();
+                return true;
             }
         });
     }
