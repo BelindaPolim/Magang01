@@ -14,7 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".InformasiTambahan"></activity>
+        <activity
+            android:name=".DatePickerActivity"
+            android:theme="@style/CustomDialog"/>
+        <activity android:name=".InformasiTambahan" />
         <activity android:name=".ChartPenjualan" />
         <activity android:name=".ChartPembelian" />
         <activity android:name=".ForgotEmailActivity" />

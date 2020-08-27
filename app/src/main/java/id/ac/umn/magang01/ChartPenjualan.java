@@ -165,13 +165,15 @@ public class ChartPenjualan extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             showProgressDialog();
+
+            Setting.PER_BULAN = 1;
         }
 
         @Override
         protected Void doInBackground(String... strings) {
             HttpHandler sh = new HttpHandler();
 
-            String url = Setting.API_Penjualan_Dagang + "?" + "FromTahunBulan=201906" + "&" + "ToTahunBulan=201908" + "&" + "PerBulan=1";
+            String url = Setting.API_Penjualan_Dagang + "?FromTahunBulan=" + Setting.FROM_DATE + "&ToTahunBulan=" + Setting.TO_DATE + "&PerBulan=" + Setting.PER_BULAN;
             String jsonStr = sh.makeServiceCall(url);
 
             DecimalFormat pemisahRibuan = (DecimalFormat) DecimalFormat.getCurrencyInstance();

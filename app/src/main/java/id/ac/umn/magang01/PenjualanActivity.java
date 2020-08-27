@@ -25,7 +25,10 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class PenjualanActivity extends AppCompatActivity {
 
@@ -34,7 +37,7 @@ public class PenjualanActivity extends AppCompatActivity {
     private ProgressDialog prog;
     private ListView lv;
     EditText etSearch;
-    ImageView imgBack, imgRefresh, imgSearch;
+    ImageView imgBack, imgRefresh, imgSearch, imgDate;
 
     ArrayList<PenjualanModel> penjualan = new ArrayList<>();
 
@@ -42,6 +45,20 @@ public class PenjualanActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_penjualan);
+
+//        String thisYear = new SimpleDateFormat("yyyy").format(new Date());
+//        String thisMonth = new SimpleDateFormat("MM").format(new Date());
+
+//        Calendar cal = Calendar.getInstance();
+//        int year = cal.get(Calendar.YEAR);
+//        SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
+//        String thisYear = yearFormat.format(year);
+//
+//        int month = cal.get(Calendar.MONTH);
+
+//        Setting.FROM_DATE = thisYear + "06";
+//        Setting.TO_DATE = thisYear + thisMonth;
+//        Setting.PER_BULAN = 0;
 
         lv = findViewById(R.id.listView);
         lv.setTextFilterEnabled(true);
@@ -55,6 +72,14 @@ public class PenjualanActivity extends AppCompatActivity {
             public void onClick(View v) {
                 getParent();
                 finish();
+            }
+        });
+
+        imgDate = findViewById(R.id.imgDate);
+        imgDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), DatePickerActivity.class));
             }
         });
 
@@ -119,6 +144,7 @@ public class PenjualanActivity extends AppCompatActivity {
                             Intent chartPenjualan = new Intent(PenjualanActivity.this, ChartPenjualan.class);
                             String nama = penjualan.get(position).getName();
                             chartPenjualan.putExtra("nama", nama);
+                            Setting.PER_BULAN = 1;
                             startActivity(chartPenjualan);
                         }
                     }
@@ -161,13 +187,15 @@ public class PenjualanActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             showProgressDialog();
+
+            Setting.PER_BULAN = 0;
         }
 
         @Override
         protected Void doInBackground(String... strings) {
             HttpHandler sh = new HttpHandler();
-
-            String url = Setting.API_Penjualan_Dagang + "?" + "FromTahunBulan=202006" + "&" + "ToTahunBulan=202008" + "&" + "PerBulan=0";
+            Log.d(TAG, "doInBackground: INI VALUE SP FROM DATE" + Setting.FROM_DATE + "SP_TODATE" + Setting.TO_DATE);
+            String url = Setting.API_Penjualan_Dagang + "?FromTahunBulan=" + Setting.FROM_DATE + "&ToTahunBulan=" + Setting.TO_DATE + "&PerBulan=" + Setting.PER_BULAN;
             String jsonStr = sh.makeServiceCall(url);
 
             DecimalFormat pemisahRibuan = (DecimalFormat) DecimalFormat.getCurrencyInstance();

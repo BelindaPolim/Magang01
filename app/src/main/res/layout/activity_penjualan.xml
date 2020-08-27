@@ -21,10 +21,10 @@
             android:layout_marginStart="15dp"
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_arrow_back"
-            android:tint="@color/colorPrimaryLight"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/textTitle"
-            app:layout_constraintBottom_toBottomOf="@id/textTitle"/>
+            app:layout_constraintBottom_toBottomOf="@id/textTitle"
+            app:tint="@color/colorPrimaryLight" />
 
         <TextView
             android:id="@+id/textTitle"
@@ -42,16 +42,27 @@
             app:layout_constraintHorizontal_chainStyle="packed"/>
 
         <ImageView
+            android:id="@+id/imgDate"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="15dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_baseline_date_range"
+            app:layout_constraintBottom_toBottomOf="@id/textTitle"
+            app:layout_constraintEnd_toStartOf="@id/imgRefresh"
+            app:layout_constraintTop_toTopOf="@id/textTitle"
+            app:tint="@color/colorPrimaryLight" />
+        <ImageView
             android:id="@+id/imgRefresh"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="15dp"
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_refresh"
-            android:tint="@color/colorPrimaryLight"
             app:layout_constraintBottom_toBottomOf="@id/textTitle"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/textTitle"/>
+            app:layout_constraintTop_toTopOf="@id/textTitle"
+            app:tint="@color/colorPrimaryLight" />
 
         <LinearLayout
             android:id="@+id/searchBar"
@@ -89,7 +100,7 @@
                 android:contentDescription="@string/app_name"
                 android:padding="6dp"
                 android:src="@drawable/ic_search"
-                android:tint="@color/colorPrimary"/>
+                app:tint="@color/colorPrimary" />
         </LinearLayout>
 
         <TextView
