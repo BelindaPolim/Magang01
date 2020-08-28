@@ -210,7 +210,7 @@ public class PenjualanActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(String... strings) {
             HttpHandler sh = new HttpHandler();
-            Log.d(TAG, "doInBackground: INI VALUE SP FROM DATE" + Setting.FROM_DATE + "SP_TODATE" + Setting.TO_DATE);
+//            Log.d(TAG, "doInBackground: INI VALUE SP FROM DATE" + Setting.FROM_DATE + "SP_TODATE" + Setting.TO_DATE);
             String url = Setting.API_Penjualan_Dagang + "?FromTahunBulan=" + Setting.FROM_DATE + "&ToTahunBulan=" + Setting.TO_DATE + "&PerBulan=" + Setting.PER_BULAN;
             String jsonStr = sh.makeServiceCall(url);
 

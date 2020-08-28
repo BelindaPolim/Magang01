@@ -75,16 +75,6 @@ public class ChartPembelian extends AppCompatActivity {
     }
 
     public class LabelFormatter implements IAxisValueFormatter {
-//        private final String[] mLabels;
-        private final String[] mLabels;
-
-//        public LabelFormatter(String[] labels) {
-//            mLabels = labels;
-//        }
-        public LabelFormatter(String[] labels) {
-            mLabels = labels;
-        }
-
         @Override
         public String getFormattedValue(float value, AxisBase axis) {
             Log.d(TAG, "getFormattedValue: " + value);
@@ -124,17 +114,14 @@ public class ChartPembelian extends AppCompatActivity {
 
         BarDataSet barDataSet = new BarDataSet(pembelian, "Nilai pembelian per bulan");
 
-        String[] labels = {};
 
-//        BarData barData = new BarData((IBarDataSet) labels, barDataSet);
         BarData barData = new BarData(barDataSet);
         barChart.setData(barData);
         barDataSet.setColor(ColorTemplate.MATERIAL_COLORS[1]);
         barDataSet.setValueTextColor(Color.BLACK);
         barDataSet.setValueTextSize(16f);
 
-//        barChart.getXAxis().setValueFormatter(new LabelFormatter(labels));
-        barChart.getXAxis().setValueFormatter(new LabelFormatter(labels));
+        barChart.getXAxis().setValueFormatter(new LabelFormatter());
 
         // Pengaturan sumbu X
         XAxis xAxis = barChart.getXAxis();
@@ -191,13 +178,15 @@ public class ChartPembelian extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             showProgressDialog();
+
+            Setting.PER_BULAN = 1;
         }
 
         @Override
         protected Void doInBackground(String... strings) {
             HttpHandler sh = new HttpHandler();
 
-            String url = Setting.API_Pembelian_Dagang + "?" + "FromTahunBulan=202006" + "&" + "ToTahunBulan=202008" + "&" + "PerBulan=1";
+            String url = Setting.API_Pembelian_Dagang + "?FromTahunBulan=" + Setting.FROM_DATE + "&ToTahunBulan=" + Setting.TO_DATE + "&PerBulan=" + Setting.PER_BULAN;
             String jsonStr = sh.makeServiceCall(url);
 
             DecimalFormat pemisahRibuan = (DecimalFormat) DecimalFormat.getCurrencyInstance();

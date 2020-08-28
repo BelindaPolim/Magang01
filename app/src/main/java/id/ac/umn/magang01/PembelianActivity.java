@@ -34,7 +34,7 @@ public class PembelianActivity extends AppCompatActivity {
     private ProgressDialog prog;
     private ListView lv;
     EditText etSearch;
-    ImageView imgBack, imgRefresh, imgSearch;
+    ImageView imgBack, imgRefresh, imgSearch, imgDate;
 
     ArrayList<PembelianModel> pembelian = new ArrayList<>();
 
@@ -55,6 +55,15 @@ public class PembelianActivity extends AppCompatActivity {
             public void onClick(View v) {
                 getParent();
                 finish();
+            }
+        });
+
+        imgDate = findViewById(R.id.imgDate);
+        imgDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent dateChange = new Intent(getApplicationContext(), DatePickerActivity.class);
+                startActivityForResult(dateChange, 1);
             }
         });
 
@@ -130,6 +139,15 @@ public class PembelianActivity extends AppCompatActivity {
         });
     }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK){
+                refreshData();
+            }
+        }
+    }
+
     private void refreshData() {
         startActivity(new Intent(PembelianActivity.this, PembelianActivity.class));
         finish();
@@ -162,13 +180,15 @@ public class PembelianActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             showProgressDialog();
+
+            Setting.PER_BULAN = 0;
         }
 
         @Override
         protected Void doInBackground(String... strings) {
             HttpHandler sh = new HttpHandler();
 
-            String url = Setting.API_Pembelian_Dagang + "?" + "FromTahunBulan=202006" + "&" + "ToTahunBulan=202008" + "&" + "PerBulan=0";
+            String url = Setting.API_Pembelian_Dagang + "?FromTahunBulan=" + Setting.FROM_DATE + "&ToTahunBulan=" + Setting.TO_DATE + "&PerBulan=" + Setting.PER_BULAN;
             String jsonStr = sh.makeServiceCall(url);
 
             DecimalFormat pemisahRibuan = (DecimalFormat) DecimalFormat.getCurrencyInstance();

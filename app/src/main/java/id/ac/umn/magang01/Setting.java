@@ -31,24 +31,14 @@ public class Setting {
     //Date settings
     public static String DISPLAY_FROM_DATE = "";
     public static String DISPLAY_TO_DATE = "";
-//    Calendar cal = Calendar.getInstance();
-//    int year = cal.get(Calendar.YEAR);
-//    int month = cal.get(Calendar.MONTH);
-//
-//    SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
-//    String thisYear = yearFormat.format(year);
-//
-//    SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
-//    String thisMonth = monthFormat.format(month);
 
-//    private static String thisYear = new SimpleDateFormat("yyyy").format(Calendar.getInstance().get(Calendar.YEAR));
-//    private static String thisMonth = new SimpleDateFormat("MM").format(Calendar.getInstance().get(Calendar.MONTH));
+    //Parameter
 
-    public static String thisYear = new SimpleDateFormat("yyyy").format(new Date());
-    public static String thisMonth = new SimpleDateFormat("MM").format(new Date());
+        //Default date
+        public static String thisYear = new SimpleDateFormat("yyyy").format(new Date());
+        public static String thisMonth = new SimpleDateFormat("MM").format(new Date());
 
     public static String FROM_DATE = thisYear + "01";
-//    public static int TO_DATE = Calendar.getInstance().get(Calendar.YEAR) + Calendar.getInstance().get(Calendar.MONTH);
     public static String TO_DATE = thisYear + thisMonth;
     public static int PER_BULAN;
 }
