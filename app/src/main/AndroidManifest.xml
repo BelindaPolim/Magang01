@@ -18,7 +18,10 @@
             android:name=".DatePickerActivity"
             android:theme="@style/CustomDialog"/>
         <activity android:name=".InformasiTambahan" />
-        <activity android:name=".ChartPenjualan" />
+        <activity
+            android:name=".ChartPenjualan"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|keyboardHidden" />
         <activity android:name=".ChartPembelian" />
         <activity android:name=".ForgotEmailActivity" />
         <activity

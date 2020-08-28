@@ -14,7 +14,11 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Set;
 
 public class DatePickerActivity extends AppCompatActivity {
@@ -25,6 +29,7 @@ public class DatePickerActivity extends AppCompatActivity {
     private Button btnSendDate;
     private DatePickerDialog.OnDateSetListener fromDateListener;
     private DatePickerDialog.OnDateSetListener toDateListener;
+    String periodeAwal, periodeAkhir;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +38,8 @@ public class DatePickerActivity extends AppCompatActivity {
 
         fromDate = findViewById(R.id.fromDate);
 //        fromDate.setText(Setting.FROM_DATE);
-        if (Setting.DISPLAY_FROM_DATE != "")
-            fromDate.setText(Setting.DISPLAY_FROM_DATE);
+//        if (Setting.DISPLAY_FROM_DATE != "")
+        fromDate.setText(Setting.DISPLAY_FROM_DATE);
 
         fromDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +77,15 @@ public class DatePickerActivity extends AppCompatActivity {
 
                 Setting.FROM_DATE = sendDate;
 
+//                DateFormat inFormat = new SimpleDateFormat("yyyyMM");
+//                DateFormat outFormat = new SimpleDateFormat("MMM yyyy");
+//                try {
+//                    Date dateFormat = inFormat.parse(Setting.FROM_DATE);
+//                    periodeAwal = outFormat.format(dateFormat);
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+
                 Setting.DISPLAY_FROM_DATE = date;
                 fromDate.setText(Setting.DISPLAY_FROM_DATE);
             }
@@ -79,8 +93,8 @@ public class DatePickerActivity extends AppCompatActivity {
 
         toDate = findViewById(R.id.toDate);
 //        toDate.setText(Setting.TO_DATE);
-        if (Setting.DISPLAY_TO_DATE != "")
-            toDate.setText(Setting.DISPLAY_TO_DATE);
+//        if (Setting.DISPLAY_TO_DATE != "")
+        toDate.setText(Setting.DISPLAY_TO_DATE);
 
         toDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +130,16 @@ public class DatePickerActivity extends AppCompatActivity {
                     sendDate = year + String.valueOf(month);
                 }
                 Setting.TO_DATE = sendDate;
+
+//                DateFormat inFormat = new SimpleDateFormat("yyyyMM");
+//                DateFormat outFormat = new SimpleDateFormat("MMM yyyy");
+//                try {
+//                    Date dateFormat = inFormat.parse(Setting.TO_DATE);
+//                    periodeAkhir = outFormat.format(dateFormat);
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+
 //                toDate.setText(date);
 
                 Setting.DISPLAY_TO_DATE = date;
@@ -127,10 +151,25 @@ public class DatePickerActivity extends AppCompatActivity {
         btnSendDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "INI VALUE FROM : " + Setting.FROM_DATE + " TO : " + Setting.TO_DATE);
+//                Log.d(TAG, "INI VALUE FROM : " + Setting.FROM_DATE + " TO : " + Setting.TO_DATE);
 //                Toast.makeText(DatePickerActivity.this, "sent", Toast.LENGTH_SHORT).show();
 //                startActivity(new Intent(getApplicationContext(), PenjualanActivity.class));
 //                finish();
+                DateFormat inFormat = new SimpleDateFormat("yyyyMM");
+                DateFormat outFormat = new SimpleDateFormat("MMM yyyy");
+                try {
+                    Date dateFormat = inFormat.parse(Setting.FROM_DATE);
+                    periodeAwal = outFormat.format(dateFormat);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    Date dateFormat = inFormat.parse(Setting.TO_DATE);
+                    periodeAkhir = outFormat.format(dateFormat);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Setting.DISPLAY_PERIODE = "Periode " + periodeAwal + " - " + periodeAkhir;
                 Intent intent = new Intent();
                 setResult(RESULT_OK, intent);
                 finish();

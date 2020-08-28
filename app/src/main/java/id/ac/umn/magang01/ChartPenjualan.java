@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,8 +21,11 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,7 +45,7 @@ public class ChartPenjualan extends AppCompatActivity {
 
     private ProgressDialog prog;
     ImageView imgBack;
-    TextView namaCust;
+    TextView namaCust, periode;
     String label;
 
     ArrayList<BarEntry> penjualan = new ArrayList<>();
@@ -66,6 +70,9 @@ public class ChartPenjualan extends AppCompatActivity {
 
         namaCust = findViewById(R.id.custName);
         namaCust.setText(name);
+
+        periode = findViewById(R.id.periode);
+        periode.setText(Setting.DISPLAY_PERIODE);
     }
 
     public class LabelFormatter implements IAxisValueFormatter {
@@ -82,7 +89,7 @@ public class ChartPenjualan extends AppCompatActivity {
             String val = String.valueOf(value);
 
             DateFormat inputFormat = new SimpleDateFormat("yyyyMM");
-            DateFormat outputFormat = new SimpleDateFormat("MMM yyyy");
+            DateFormat outputFormat = new SimpleDateFormat("MMM");
             try {
                 Date date = inputFormat.parse(val);
                 label = outputFormat.format(date);
@@ -94,21 +101,89 @@ public class ChartPenjualan extends AppCompatActivity {
         }
     }
 
+    public class MyYAxisValueFormatter implements IAxisValueFormatter {
+        private DecimalFormat mFormat;
+//        DecimalFormat pemisahRibuan = (DecimalFormat) DecimalFormat.getCurrencyInstance();
+//        DecimalFormatSymbols formatPemisah = new DecimalFormatSymbols();
+//
+//        formatPemisah.setCurrencySymbol("");
+
+//        public MyYAxisValueFormatter() {
+//
+//            mFormat = new DecimalFormat("###.###");
+//        }
+
+        @Override
+        public String getFormattedValue(float value, AxisBase axis) {
+            // "value" represents the position of the label on the axis (x or y)
+            DecimalFormat pemisahRibuan = (DecimalFormat) DecimalFormat.getCurrencyInstance();
+            DecimalFormatSymbols formatPemisah = new DecimalFormatSymbols();
+
+            formatPemisah.setCurrencySymbol("");
+            formatPemisah.setMonetaryDecimalSeparator(',');
+            formatPemisah.setGroupingSeparator('.');
+
+            pemisahRibuan.setDecimalFormatSymbols(formatPemisah);
+
+            String nilai = pemisahRibuan.format(value);
+
+            return pemisahRibuan.format(value).substring(0, nilai.length()-3);
+        }
+    }
+
+    public class MyValueFormatter implements IValueFormatter {
+
+//        public MyValueFormatter() {
+//            mFormat = new DecimalFormat("###.###.###"); // use one decimal
+//        }
+
+        @Override
+        public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+            DecimalFormat pemisahRibuan = (DecimalFormat) DecimalFormat.getCurrencyInstance();
+            DecimalFormatSymbols formatPemisah = new DecimalFormatSymbols();
+
+            formatPemisah.setCurrencySymbol("");
+            formatPemisah.setMonetaryDecimalSeparator(',');
+            formatPemisah.setGroupingSeparator('.');
+
+            pemisahRibuan.setDecimalFormatSymbols(formatPemisah);
+
+            String nilai = pemisahRibuan.format(value);
+
+            return pemisahRibuan.format(value).substring(0, nilai.length()-3);        }
+    }
+
+//    public class IntValueFormatter implements IValueFormatter {
+//        @Override
+//        public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+//            return String.valueOf((int) value);
+//        }
+//    }
+
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        // ignore orientation/keyboard change
+        super.onConfigurationChanged(newConfig);
+    }
+
     private void callBarChart(){
-        float barWidth = 0.45f;
+//        float barWidth = 0.45f;
 
         BarChart barChart = findViewById(R.id.chart);
 
         BarDataSet barDataSet = new BarDataSet(penjualan, "Nilai penjualan per bulan");
-        String[] labels = {};
+//        String[] labels = {};
 
         BarData barData = new BarData(barDataSet);
         barChart.setData(barData);
         barDataSet.setColor(ColorTemplate.MATERIAL_COLORS[1]);
         barDataSet.setValueTextColor(Color.BLACK);
-        barDataSet.setValueTextSize(16f);
-
-        barChart.getXAxis().setValueFormatter(new LabelFormatter());
+        barDataSet.setValueTextSize(9f);
+//        barDataSet.setValueFormatter(new MyValueFormatter());
+//        barChart.getAxis().setValueFormatter();
+//        barChart.getXAxis().setValueFormatter(new LabelFormatter());
+//        barChart.getAxisLeft().setValueFormatter((IAxisValueFormatter) new IntValueFormatter());
 
         // Pengaturan sumbu X
         XAxis xAxis = barChart.getXAxis();
@@ -122,16 +197,17 @@ public class ChartPenjualan extends AppCompatActivity {
 
         YAxis yAxis = barChart.getAxisLeft();
         yAxis.setAxisMinimum(0f);
+        yAxis.setValueFormatter(new MyYAxisValueFormatter());
 
         //Menghilangkan sumbu Y yang ada di sebelah kanan
         barChart.getAxisRight().setEnabled(false);
-
         // Menghilankan deskripsi pada Chart
         barChart.getDescription().setEnabled(false);
 
+
         barChart.setFitBars(true);
         barChart.setData(barData);
-        barChart.getBarData().setBarWidth(barWidth);
+        barChart.getBarData().setBarWidth(0.8f);
         barChart.animateY(2000);
         barChart.setDragEnabled(true);
         barChart.setPinchZoom(true);
@@ -206,7 +282,7 @@ public class ChartPenjualan extends AppCompatActivity {
 
                         String search = strings[0];
 
-                        if(name.equals(search.toUpperCase())){
+                        if(name.equals(search.toUpperCase()) && Integer.parseInt(yrMonth) > Integer.parseInt(Setting.FROM_DATE) && Integer.parseInt(yrMonth) < Integer.parseInt(Setting.TO_DATE)){
                             penjualan.add(new BarEntry(Float.parseFloat(yrMonth), nilaiPenjualan));
                         }
 //                        else if(name.contains(search.toUpperCase())) {

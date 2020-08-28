@@ -27,11 +27,6 @@ public class Setting {
     public static final String SP_EMAIL = "user_email";
     public static final String SP_NO_HP = "user_email";
 
-
-    //Date settings
-    public static String DISPLAY_FROM_DATE = "";
-    public static String DISPLAY_TO_DATE = "";
-
     //Parameter
 
         //Default date
@@ -41,4 +36,9 @@ public class Setting {
     public static String FROM_DATE = thisYear + "01";
     public static String TO_DATE = thisYear + thisMonth;
     public static int PER_BULAN;
+
+    //Display date
+    public static String DISPLAY_FROM_DATE = "01/" + thisYear;
+    public static String DISPLAY_TO_DATE = thisMonth + "/" + thisYear;
+    public static String DISPLAY_PERIODE = "Jan " + thisYear + " - " + new SimpleDateFormat("MMM").format(new Date()) + " " + thisYear ;
 }
