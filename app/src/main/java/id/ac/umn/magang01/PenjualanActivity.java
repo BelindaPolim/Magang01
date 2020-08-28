@@ -79,7 +79,8 @@ public class PenjualanActivity extends AppCompatActivity {
         imgDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), DatePickerActivity.class));
+                Intent dateChange = new Intent(getApplicationContext(), DatePickerActivity.class);
+                startActivityForResult(dateChange, 1);
             }
         });
 
@@ -153,12 +154,27 @@ public class PenjualanActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+//        if (Setting.DATE_CHANGED == 1){
+//            refreshData();
+//        }
     }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK){
+                refreshData();
+            }
+        }
+    }
+
 
     private void refreshData() {
         startActivity(new Intent(PenjualanActivity.this, PenjualanActivity.class));
         finish();
     }
+
 
     private void  showProgressDialog(){
         if(prog == null){
