@@ -48,7 +48,9 @@ public class ChartPenjualan extends AppCompatActivity {
     TextView namaCust, periode;
     String label;
 
-    ArrayList<BarEntry> penjualan = new ArrayList<>();
+//    ArrayList<BarEntry> penjualan = new ArrayList<>();
+    ArrayList<BarEntry> valPenjualan = new ArrayList<>();
+//    ArrayList<BarEntry> tglPenjualan = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,6 +155,26 @@ public class ChartPenjualan extends AppCompatActivity {
             return pemisahRibuan.format(value).substring(0, nilai.length()-3);        }
     }
 
+    public class xAxisValueFormatter implements IValueFormatter {
+
+        private DecimalFormat mFormat;
+
+//        public mYAxisValueFormatter() {
+//            // format values to 1 decimal digit
+//            mFormat = new DecimalFormat("###,###,##0.0");
+//        }
+
+        @Override
+        public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+            // "value" represents the position of the label on the axis (x or y)
+            if(String.valueOf(value).contains("####01") || String.valueOf(value).contains("####02") || String.valueOf(value).contains("####03")) {
+                return mFormat.format(value);
+            } else {
+                return "";
+            }
+        }
+    }
+
 //    public class IntValueFormatter implements IValueFormatter {
 //        @Override
 //        public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
@@ -168,25 +190,22 @@ public class ChartPenjualan extends AppCompatActivity {
     }
 
     private void callBarChart(){
-//        float barWidth = 0.45f;
-
         BarChart barChart = findViewById(R.id.chart);
 
-        BarDataSet barDataSet = new BarDataSet(penjualan, "Nilai penjualan per bulan");
-//        String[] labels = {};
+//        Log.d(TAG, "callBarChart: test isi penjualan" + penjualan );
+        BarDataSet barDataSet = new BarDataSet(valPenjualan, "Nilai penjualan per bulan");
 
         BarData barData = new BarData(barDataSet);
         barChart.setData(barData);
         barDataSet.setColor(ColorTemplate.MATERIAL_COLORS[1]);
         barDataSet.setValueTextColor(Color.BLACK);
         barDataSet.setValueTextSize(9f);
-//        barDataSet.setValueFormatter(new MyValueFormatter());
-//        barChart.getAxis().setValueFormatter();
-//        barChart.getXAxis().setValueFormatter(new LabelFormatter());
-//        barChart.getAxisLeft().setValueFormatter((IAxisValueFormatter) new IntValueFormatter());
+        barDataSet.setValueFormatter(new MyValueFormatter());
+        barChart.getXAxis().setValueFormatter(new LabelFormatter());
 
         // Pengaturan sumbu X
         XAxis xAxis = barChart.getXAxis();
+
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM.BOTTOM);
         xAxis.setDrawGridLines(false);
         xAxis.setCenterAxisLabels(false);
@@ -204,10 +223,10 @@ public class ChartPenjualan extends AppCompatActivity {
         // Menghilankan deskripsi pada Chart
         barChart.getDescription().setEnabled(false);
 
-
         barChart.setFitBars(true);
         barChart.setData(barData);
         barChart.getBarData().setBarWidth(0.8f);
+//        barChart.getBarData().setDrawValues(false);
         barChart.animateY(2000);
         barChart.setDragEnabled(true);
         barChart.setPinchZoom(true);
@@ -282,8 +301,11 @@ public class ChartPenjualan extends AppCompatActivity {
 
                         String search = strings[0];
 
-                        if(name.equals(search.toUpperCase()) && Integer.parseInt(yrMonth) > Integer.parseInt(Setting.FROM_DATE) && Integer.parseInt(yrMonth) < Integer.parseInt(Setting.TO_DATE)){
-                            penjualan.add(new BarEntry(Float.parseFloat(yrMonth), nilaiPenjualan));
+                        if(name.equals(search.toUpperCase())){
+                            valPenjualan.add(new BarEntry(Float.parseFloat(yrMonth), nilaiPenjualan));
+//                            valPenjualan.add(new BarEntry(nilaiPenjualan));
+//                            tglPenjualan.add(new BarEntry(Float.parseFloat(yrMonth));
+
                         }
 //                        else if(name.contains(search.toUpperCase())) {
 //                            penjualan.add(new PenjualanModel(id, name, pemisahRibuan.format(nilaiPenjualan).substring(0, nilai.length()-3)));
