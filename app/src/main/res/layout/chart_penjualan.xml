@@ -51,6 +51,16 @@
             android:text="Nama Customer"
             android:textColor="@color/colorPrimaryLight"
             android:textSize="25sp"/>
+        <ImageView
+            android:id="@+id/imgDate"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_baseline_date_range"
+            app:layout_constraintBottom_toBottomOf="@id/textTitle"
+            app:layout_constraintTop_toTopOf="@id/textTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@color/colorPrimaryLight" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView

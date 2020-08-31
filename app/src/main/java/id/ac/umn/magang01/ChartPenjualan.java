@@ -44,13 +44,13 @@ public class ChartPenjualan extends AppCompatActivity {
     private String TAG = ChartPenjualan.class.getSimpleName();
 
     private ProgressDialog prog;
-    ImageView imgBack;
+    ImageView imgBack, imgDate;
     TextView namaCust, periode;
     String label;
 
 //    ArrayList<BarEntry> penjualan = new ArrayList<>();
     ArrayList<BarEntry> valPenjualan = new ArrayList<>();
-//    ArrayList<BarEntry> tglPenjualan = new ArrayList<>();
+    ArrayList<String> tglPenjualan = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +66,18 @@ public class ChartPenjualan extends AppCompatActivity {
             }
         });
 
-        Intent getPosition = getIntent();
-        String name = getPosition.getStringExtra("nama");
+        imgDate = findViewById(R.id.imgDate);
+        imgDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent dateChange = new Intent(getApplicationContext(), DatePickerActivity.class);
+                startActivityForResult(dateChange, 1);
+            }
+        });
+
+//        Intent getPosition = getIntent();
+//        String name = getPosition.getStringExtra("nama");
+        String name = Setting.SELECTED_NAME;
         new GetContacts().execute(name);
 
         namaCust = findViewById(R.id.custName);
@@ -77,18 +87,35 @@ public class ChartPenjualan extends AppCompatActivity {
         periode.setText(Setting.DISPLAY_PERIODE);
     }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK){
+                refreshData();
+            }
+        }
+    }
+
+    private void refreshData() {
+        startActivity(new Intent(ChartPenjualan.this, ChartPenjualan.class));
+        finish();
+    }
+
     public class LabelFormatter implements IAxisValueFormatter {
-        //        private final String[] mLabels;
-//        private final String[] mLabels;
-//
-//        public LabelFormatter(String[] labels) {
+
+//        private final ArrayList<String> mLabels;
+//        public LabelFormatter(ArrayList labels) {
 //            mLabels = labels;
 //        }
+
 
         @Override
         public String getFormattedValue(float value, AxisBase axis) {
             Log.d(TAG, "getFormattedValue: " + value);
-            String val = String.valueOf(value);
+//            String val = String.valueOf(value);
+//            String val = tglPenjualan.get((int)value);
+
+            String val = tglPenjualan.get((int)value);
 
             DateFormat inputFormat = new SimpleDateFormat("yyyyMM");
             DateFormat outputFormat = new SimpleDateFormat("MMM");
@@ -98,6 +125,7 @@ public class ChartPenjualan extends AppCompatActivity {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+
 
             return label;
         }
@@ -155,25 +183,6 @@ public class ChartPenjualan extends AppCompatActivity {
             return pemisahRibuan.format(value).substring(0, nilai.length()-3);        }
     }
 
-    public class xAxisValueFormatter implements IValueFormatter {
-
-        private DecimalFormat mFormat;
-
-//        public mYAxisValueFormatter() {
-//            // format values to 1 decimal digit
-//            mFormat = new DecimalFormat("###,###,##0.0");
-//        }
-
-        @Override
-        public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-            // "value" represents the position of the label on the axis (x or y)
-            if(String.valueOf(value).contains("####01") || String.valueOf(value).contains("####02") || String.valueOf(value).contains("####03")) {
-                return mFormat.format(value);
-            } else {
-                return "";
-            }
-        }
-    }
 
 //    public class IntValueFormatter implements IValueFormatter {
 //        @Override
@@ -192,7 +201,7 @@ public class ChartPenjualan extends AppCompatActivity {
     private void callBarChart(){
         BarChart barChart = findViewById(R.id.chart);
 
-//        Log.d(TAG, "callBarChart: test isi penjualan" + penjualan );
+//        Log.d(TAG, "callBarChart: test isi penjualan" + valPenjualan );
         BarDataSet barDataSet = new BarDataSet(valPenjualan, "Nilai penjualan per bulan");
 
         BarData barData = new BarData(barDataSet);
@@ -226,7 +235,6 @@ public class ChartPenjualan extends AppCompatActivity {
         barChart.setFitBars(true);
         barChart.setData(barData);
         barChart.getBarData().setBarWidth(0.8f);
-//        barChart.getBarData().setDrawValues(false);
         barChart.animateY(2000);
         barChart.setDragEnabled(true);
         barChart.setPinchZoom(true);
@@ -291,18 +299,21 @@ public class ChartPenjualan extends AppCompatActivity {
                     // Getting JSON Array node
                     JSONArray contacts = jsonObj.getJSONArray("data");
                     // looping through All Contacts
+                    int count = 0;
                     for (int i = 0; i < contacts.length(); i++) {
                         JSONObject c = contacts.getJSONObject(i);
 
                         String id = c.getString("CustCode");
                         String name = c.getString("FullName");
                         String yrMonth = c.getString("TahunBulan");
-                        long nilaiPenjualan = c.getLong("NilaiPenjualan");
+                        int nilaiPenjualan = c.getInt("NilaiPenjualan");
 
                         String search = strings[0];
 
                         if(name.equals(search.toUpperCase())){
-                            valPenjualan.add(new BarEntry(Float.parseFloat(yrMonth), nilaiPenjualan));
+                            tglPenjualan.add(yrMonth);
+                            valPenjualan.add(new BarEntry(count, nilaiPenjualan));
+                            count++;
 //                            valPenjualan.add(new BarEntry(nilaiPenjualan));
 //                            tglPenjualan.add(new BarEntry(Float.parseFloat(yrMonth));
 

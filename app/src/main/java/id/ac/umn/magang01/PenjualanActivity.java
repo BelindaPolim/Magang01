@@ -143,8 +143,9 @@ public class PenjualanActivity extends AppCompatActivity {
                         }
                         if (which == 1){
                             Intent chartPenjualan = new Intent(PenjualanActivity.this, ChartPenjualan.class);
-                            String nama = penjualan.get(position).getName();
-                            chartPenjualan.putExtra("nama", nama);
+//                            String nama = penjualan.get(position).getName();
+//                            chartPenjualan.putExtra("nama", nama);
+                            Setting.SELECTED_NAME = penjualan.get(position).getName();
                             Setting.PER_BULAN = 1;
                             startActivity(chartPenjualan);
                         }

@@ -28,6 +28,7 @@ public class Setting {
     public static final String SP_NO_HP = "user_email";
 
     //Parameter
+    public static String SELECTED_NAME = "";
 
         //Default date
         public static String thisYear = new SimpleDateFormat("yyyy").format(new Date());
