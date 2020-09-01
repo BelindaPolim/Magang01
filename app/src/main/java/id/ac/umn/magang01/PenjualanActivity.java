@@ -137,8 +137,10 @@ public class PenjualanActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         if (which == 0){
                             Intent infoTambahan = new Intent(PenjualanActivity.this, InformasiTambahan.class);
-                            String nama = penjualan.get(position).getName();
-                            infoTambahan.putExtra("nama", nama);
+                            String code = penjualan.get(position).getID();
+                            infoTambahan.putExtra("url", Setting.API_Informasi_Customer);
+                            infoTambahan.putExtra("param", "?CustCode=");
+                            infoTambahan.putExtra("code", code);
                             startActivity(infoTambahan);
                         }
                         if (which == 1){
