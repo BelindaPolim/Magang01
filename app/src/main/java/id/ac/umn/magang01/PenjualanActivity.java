@@ -23,12 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 public class PenjualanActivity extends AppCompatActivity {
 
@@ -217,15 +212,6 @@ public class PenjualanActivity extends AppCompatActivity {
             String url = Setting.API_Penjualan_Dagang + "?FromTahunBulan=" + Setting.FROM_DATE + "&ToTahunBulan=" + Setting.TO_DATE + "&PerBulan=" + Setting.PER_BULAN;
             String jsonStr = sh.makeServiceCall(url);
 
-            DecimalFormat pemisahRibuan = (DecimalFormat) DecimalFormat.getCurrencyInstance();
-            DecimalFormatSymbols formatPemisah = new DecimalFormatSymbols();
-
-            formatPemisah.setCurrencySymbol("");
-            formatPemisah.setMonetaryDecimalSeparator(',');
-            formatPemisah.setGroupingSeparator('.');
-
-            pemisahRibuan.setDecimalFormatSymbols(formatPemisah);
-
             if(jsonStr == null) Log.e(TAG, "JSON null");
 
             Log.e(TAG, "Response from url: " + jsonStr);
@@ -245,14 +231,14 @@ public class PenjualanActivity extends AppCompatActivity {
 //                        String yrmonth = c.getString("TahunBulan");
                         int nilaiPenjualan = c.getInt("NilaiPenjualan");
 
-                        String nilai = pemisahRibuan.format(nilaiPenjualan);
+                        String nilai = Setting.pemisahRibuan(nilaiPenjualan);
 
                         String search = strings[0];
                         if(search.isEmpty()){
-                            penjualan.add(new PenjualanModel(id, name, pemisahRibuan.format(nilaiPenjualan).substring(0, nilai.length()-3)));
+                            penjualan.add(new PenjualanModel(id, name, Setting.pemisahRibuan(nilaiPenjualan).substring(0, nilai.length()-3)));
                         }
                         else if(name.contains(search.toUpperCase())) {
-                            penjualan.add(new PenjualanModel(id, name, pemisahRibuan.format(nilaiPenjualan).substring(0, nilai.length()-3)));
+                            penjualan.add(new PenjualanModel(id, name, Setting.pemisahRibuan(nilaiPenjualan).substring(0, nilai.length()-3)));
                         }
                     }
 

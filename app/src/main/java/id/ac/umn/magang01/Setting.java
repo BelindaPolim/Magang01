@@ -1,5 +1,7 @@
 package id.ac.umn.magang01;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -42,5 +44,19 @@ public class Setting {
     //Display date
     public static String DISPLAY_FROM_DATE = "01/" + thisYear;
     public static String DISPLAY_TO_DATE = thisMonth + "/" + thisYear;
-    public static String DISPLAY_PERIODE = "Jan " + thisYear + " - " + new SimpleDateFormat("MMM").format(new Date()) + " " + thisYear ;
+    public static String DISPLAY_PERIODE = "Jan " + thisYear + " - " + new SimpleDateFormat("MMM").format(new Date()) + " " + thisYear;
+
+    //Pemisah ribuan
+    public static String pemisahRibuan(int value){
+        DecimalFormat pemisahRibuan = (DecimalFormat) DecimalFormat.getCurrencyInstance();
+        DecimalFormatSymbols formatPemisah = new DecimalFormatSymbols();
+
+        formatPemisah.setCurrencySymbol("");
+        formatPemisah.setMonetaryDecimalSeparator(',');
+        formatPemisah.setGroupingSeparator('.');
+
+        pemisahRibuan.setDecimalFormatSymbols(formatPemisah);
+
+        return pemisahRibuan.format(value);
+    }
 }
