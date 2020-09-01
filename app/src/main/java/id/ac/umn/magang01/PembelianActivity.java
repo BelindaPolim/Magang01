@@ -22,9 +22,6 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 
 public class PembelianActivity extends AppCompatActivity {
@@ -193,14 +190,14 @@ public class PembelianActivity extends AppCompatActivity {
             String url = Setting.API_Pembelian_Dagang + "?FromTahunBulan=" + Setting.FROM_DATE + "&ToTahunBulan=" + Setting.TO_DATE + "&PerBulan=" + Setting.PER_BULAN;
             String jsonStr = sh.makeServiceCall(url);
 
-            DecimalFormat pemisahRibuan = (DecimalFormat) DecimalFormat.getCurrencyInstance();
-            DecimalFormatSymbols formatPemisah = new DecimalFormatSymbols();
-
-            formatPemisah.setCurrencySymbol("");
-            formatPemisah.setMonetaryDecimalSeparator(',');
-            formatPemisah.setGroupingSeparator('.');
-
-            pemisahRibuan.setDecimalFormatSymbols(formatPemisah);
+//            DecimalFormat pemisahRibuan = (DecimalFormat) DecimalFormat.getCurrencyInstance();
+//            DecimalFormatSymbols formatPemisah = new DecimalFormatSymbols();
+//
+//            formatPemisah.setCurrencySymbol("");
+//            formatPemisah.setMonetaryDecimalSeparator(',');
+//            formatPemisah.setGroupingSeparator('.');
+//
+//            pemisahRibuan.setDecimalFormatSymbols(formatPemisah);
 
             if(jsonStr == null) Log.e(TAG, "JSON null");
 
@@ -220,14 +217,14 @@ public class PembelianActivity extends AppCompatActivity {
                         String name = c.getString("FullName");
                         int nilaiPembelian = c.getInt("NilaiPembelian");
 
-                        String nilai = pemisahRibuan.format(nilaiPembelian);
+                        String nilai = Setting.pemisahRibuan(nilaiPembelian);
 
                         String search = strings[0];
                         if(search.isEmpty()){
-                            pembelian.add(new PembelianModel(id, name, pemisahRibuan.format(nilaiPembelian).substring(0, nilai.length()-3)));
+                            pembelian.add(new PembelianModel(id, name, Setting.pemisahRibuan(nilaiPembelian).substring(0, nilai.length()-3)));
                         }
                         else if(name.contains(search.toUpperCase())) {
-                            pembelian.add(new PembelianModel(id, name, pemisahRibuan.format(nilaiPembelian).substring(0, nilai.length()-3)));
+                            pembelian.add(new PembelianModel(id, name, Setting.pemisahRibuan(nilaiPembelian).substring(0, nilai.length()-3)));
                         }
                     }
 

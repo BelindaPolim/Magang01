@@ -32,8 +32,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -102,7 +100,7 @@ public class ChartPembelian extends AppCompatActivity {
 
         @Override
         public String getFormattedValue(float value, AxisBase axis) {
-            Log.d(TAG, "getFormattedValue: " + value);
+//            Log.d(TAG, "getFormattedValue: " + value);
 
             String val = tglPembelian.get((int)value);
 
@@ -125,18 +123,10 @@ public class ChartPembelian extends AppCompatActivity {
         @Override
         public String getFormattedValue(float value, AxisBase axis) {
             // "value" represents the position of the label on the axis (x or y)
-            DecimalFormat pemisahRibuan = (DecimalFormat) DecimalFormat.getCurrencyInstance();
-            DecimalFormatSymbols formatPemisah = new DecimalFormatSymbols();
 
-            formatPemisah.setCurrencySymbol("");
-            formatPemisah.setMonetaryDecimalSeparator(',');
-            formatPemisah.setGroupingSeparator('.');
+            String nilai = Setting.pemisahRibuan(value);
 
-            pemisahRibuan.setDecimalFormatSymbols(formatPemisah);
-
-            String nilai = pemisahRibuan.format(value);
-
-            return pemisahRibuan.format(value).substring(0, nilai.length()-3);
+            return Setting.pemisahRibuan(value).substring(0, nilai.length()-3);
         }
     }
 
@@ -144,18 +134,10 @@ public class ChartPembelian extends AppCompatActivity {
 
         @Override
         public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-            DecimalFormat pemisahRibuan = (DecimalFormat) DecimalFormat.getCurrencyInstance();
-            DecimalFormatSymbols formatPemisah = new DecimalFormatSymbols();
 
-            formatPemisah.setCurrencySymbol("");
-            formatPemisah.setMonetaryDecimalSeparator(',');
-            formatPemisah.setGroupingSeparator('.');
+            String nilai = Setting.pemisahRibuan(value);
 
-            pemisahRibuan.setDecimalFormatSymbols(formatPemisah);
-
-            String nilai = pemisahRibuan.format(value);
-
-            return pemisahRibuan.format(value).substring(0, nilai.length()-3);
+            return Setting.pemisahRibuan(value).substring(0, nilai.length()-3);
         }
     }
 
@@ -244,15 +226,6 @@ public class ChartPembelian extends AppCompatActivity {
 
             String url = Setting.API_Pembelian_Dagang + "?FromTahunBulan=" + Setting.FROM_DATE + "&ToTahunBulan=" + Setting.TO_DATE + "&PerBulan=" + Setting.PER_BULAN;
             String jsonStr = sh.makeServiceCall(url);
-
-            DecimalFormat pemisahRibuan = (DecimalFormat) DecimalFormat.getCurrencyInstance();
-            DecimalFormatSymbols formatPemisah = new DecimalFormatSymbols();
-
-            formatPemisah.setCurrencySymbol("");
-            formatPemisah.setMonetaryDecimalSeparator(',');
-            formatPemisah.setGroupingSeparator('.');
-
-            pemisahRibuan.setDecimalFormatSymbols(formatPemisah);
 
             if(jsonStr == null) Log.e(TAG, "JSON null");
 
