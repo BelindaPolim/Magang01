@@ -127,8 +127,8 @@ public class PembelianActivity extends AppCompatActivity {
                         }
                         if (which == 1){
                             Intent chartPembelian = new Intent(PembelianActivity.this, ChartPembelian.class);
-                            String nama = pembelian.get(position).getName();
-                            chartPembelian.putExtra("nama", nama);
+                            Setting.SELECTED_NAME = pembelian.get(position).getName();
+                            Setting.PER_BULAN = 1;
                             startActivity(chartPembelian);
                         }
                     }

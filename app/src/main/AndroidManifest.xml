@@ -22,7 +22,10 @@
             android:name=".ChartPenjualan"
             android:screenOrientation="landscape"
             android:configChanges="orientation|keyboardHidden" />
-        <activity android:name=".ChartPembelian" />
+        <activity
+            android:name=".ChartPembelian"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|keyboardHidden"/>
         <activity android:name=".ForgotEmailActivity" />
         <activity
             android:name=".HutangActivity"

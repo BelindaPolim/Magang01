@@ -20,6 +20,8 @@ public class Setting {
     public static final String API_Hutang_Dagang = API + "hutang_dagang_per_supplier";
     public static final String API_Pembelian_Dagang = API + "pembelian_per_supplier";
     public static final String API_Penjualan_Dagang = API + "penjualan_per_customer";
+    public static final String API_Informasi_Supplier = API + "info_per_supplier";
+    public static final String API_Informasi_Customer = API + "info_per_customer";
 
     //shared preference
     public static final String SP_TOKEN = "user_token";
@@ -29,7 +31,6 @@ public class Setting {
 
     //Parameter
     public static String SELECTED_NAME = "";
-
         //Default date
         public static String thisYear = new SimpleDateFormat("yyyy").format(new Date());
         public static String thisMonth = new SimpleDateFormat("MM").format(new Date());
