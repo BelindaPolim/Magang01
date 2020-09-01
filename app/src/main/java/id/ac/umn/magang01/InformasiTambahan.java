@@ -125,11 +125,6 @@ public class InformasiTambahan extends AppCompatActivity {
                         String name = c.getString("Name");
                         String info = c.getString("Info");
                         informasi.add(new InfoModel(name, info));
-
-//                        String search = strings[0];
-//                        if(name.equals(search.toUpperCase())){
-//                            informasi.add(new InfoModel(name, info));
-//                        }
                     }
 
                 } catch (final JSONException e) {

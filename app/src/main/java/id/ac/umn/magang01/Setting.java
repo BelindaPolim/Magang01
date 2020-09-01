@@ -59,4 +59,30 @@ public class Setting {
 
         return pemisahRibuan.format(value);
     }
+    public static String pemisahRibuan(String value){
+        DecimalFormat pemisahRibuan = (DecimalFormat) DecimalFormat.getCurrencyInstance();
+        DecimalFormatSymbols formatPemisah = new DecimalFormatSymbols();
+
+        formatPemisah.setCurrencySymbol("");
+        formatPemisah.setMonetaryDecimalSeparator(',');
+        formatPemisah.setGroupingSeparator('.');
+
+        pemisahRibuan.setDecimalFormatSymbols(formatPemisah);
+
+        String hasil = pemisahRibuan.format(value);
+
+        return hasil;
+    }
+    public static String pemisahRibuan(Float value){
+        DecimalFormat pemisahRibuan = (DecimalFormat) DecimalFormat.getCurrencyInstance();
+        DecimalFormatSymbols formatPemisah = new DecimalFormatSymbols();
+
+        formatPemisah.setCurrencySymbol("");
+        formatPemisah.setMonetaryDecimalSeparator(',');
+        formatPemisah.setGroupingSeparator('.');
+
+        pemisahRibuan.setDecimalFormatSymbols(formatPemisah);
+
+        return pemisahRibuan.format(value);
+    }
 }

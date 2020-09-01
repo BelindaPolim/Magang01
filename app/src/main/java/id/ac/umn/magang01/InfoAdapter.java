@@ -1,6 +1,8 @@
 package id.ac.umn.magang01;
 
 import android.content.Context;
+import android.nfc.Tag;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,10 @@ import android.widget.TextView;
 import java.util.List;
 
 public class InfoAdapter extends ArrayAdapter<InfoModel>{
+
+    private String TAG = InfoAdapter.class.getSimpleName();
+
+
     public InfoAdapter(Context context, List<InfoModel> objects) {
         super(context, 0, objects);
     }
